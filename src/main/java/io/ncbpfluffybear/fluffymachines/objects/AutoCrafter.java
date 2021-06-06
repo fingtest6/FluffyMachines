@@ -69,7 +69,7 @@ public class AutoCrafter extends SlimefunItem implements EnergyNetComponent {
                     || BlockStorage.getLocationInfo(b.getLocation(), "enabled") == null
                     || BlockStorage.getLocationInfo(b.getLocation(), "enabled").equals(String.valueOf(false))) {
                     menu.replaceExistingItem(6, new CustomItemStack(Material.GUNPOWDER, "&7Enabled: &4\u2718", "",
-                        "&e> Click to enable this Machine")
+                        "&e> 点击以启用")
                     );
                     menu.addMenuClickHandler(6, (p, slot, item, action) -> {
                         BlockStorage.addBlockInfo(b, "enabled", String.valueOf(true));
@@ -78,7 +78,7 @@ public class AutoCrafter extends SlimefunItem implements EnergyNetComponent {
                     });
                 } else {
                     menu.replaceExistingItem(6, new CustomItemStack(Material.REDSTONE, "&7Enabled: &2\u2714",
-                        "", "&e> Click to disable this Machine")
+                        "", "&e> 点击以禁用")
                     );
                     menu.addMenuClickHandler(6, (p, slot, item, action) -> {
                         BlockStorage.addBlockInfo(b, "enabled", String.valueOf(false));
@@ -185,7 +185,7 @@ public class AutoCrafter extends SlimefunItem implements EnergyNetComponent {
         }
 
         preset.addItem(2, new CustomItemStack(new ItemStack(material), "&eRecipe",
-                "", "&bPut in the Recipe you want to craft", machineName + " Recipes ONLY"
+                "", "&b放入你想要制造的配方", machineName + "合成的物品"
             ),
             (p, slot, item, action) -> false);
     }

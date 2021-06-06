@@ -85,7 +85,7 @@ public class PortableCharger extends SimpleSlimefunItem<ItemUseHandler> implemen
                 inventory.setItem(slot, borderItem);
 
             inventory.setItem(POWER_SLOT, powerItem);
-            updateSlot(inventory, POWER_SLOT, "&6&lPower Remaining",
+            updateSlot(inventory, POWER_SLOT, "&6&l剩余电量",
                 "&e" + charger.getItemCharge(chargerItem) + "J");
             inventory.clear(CHARGE_SLOT);
             p.openInventory(inventory);
@@ -99,7 +99,7 @@ public class PortableCharger extends SimpleSlimefunItem<ItemUseHandler> implemen
 
                     if (sfItem instanceof PortableCharger) {
                         p.closeInventory();
-                        Utils.send(p, "&cYou can not charge a portable charger");
+                        Utils.send(p, "&c您不能为便携式充电器充电");
                     }
 
                     if (sfItem instanceof Rechargeable) {
@@ -124,14 +124,14 @@ public class PortableCharger extends SimpleSlimefunItem<ItemUseHandler> implemen
                             }
 
                         } else if (neededCharge == 0) {
-                            Utils.send(p, "&cThis item is already full!");
+                            Utils.send(p, "&c便携充电器电量已经满了!");
 
                         } else {
-                            Utils.send(p, "&cYour charger does not have enough power!");
+                            Utils.send(p, "&c你的便携充电器没有电量了!");
                         }
 
                         // The name of the powerItem NEEDS to be "Portable Charger" to cancel event
-                        updateSlot(inventory, POWER_SLOT, "&6&lPower Remaining",
+                        updateSlot(inventory, POWER_SLOT, "&6&l剩余电量",
                             "&e" + charger.getItemCharge(chargerItem) + "J");
                     }
 
@@ -143,7 +143,7 @@ public class PortableCharger extends SimpleSlimefunItem<ItemUseHandler> implemen
 
                         // Check if player left an item inside
                         if (forgottenItem != null) {
-                            Utils.send(p, "&cHey! You left something in the charger! Dropping it now...");
+                            Utils.send(p, "&c你把物品落在充电器里了,现在还给你");
                             p.getWorld().dropItemNaturally(p.getLocation(), forgottenItem);
                         }
                     }

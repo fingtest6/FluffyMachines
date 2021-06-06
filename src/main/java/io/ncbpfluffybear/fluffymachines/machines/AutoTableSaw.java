@@ -69,7 +69,7 @@ public class AutoTableSaw extends SlimefunItem implements EnergyNetComponent {
             tableSawRecipes.put(new ItemStack(plank), new ItemStack(Material.STICK, 4));
         }
 
-        new BlockMenuPreset(getId(), "&6Auto Table Saw") {
+        new BlockMenuPreset(getId(), "&6全自动切石机") {
 
             @Override
             public void init() {
@@ -82,7 +82,7 @@ public class AutoTableSaw extends SlimefunItem implements EnergyNetComponent {
                     || BlockStorage.getLocationInfo(b.getLocation(), "enabled") == null
                     || BlockStorage.getLocationInfo(b.getLocation(), "enabled").equals(String.valueOf(false))) {
                     menu.replaceExistingItem(6, new CustomItemStack(Material.GUNPOWDER, "&7Enabled: &4\u2718",
-                        "", "&e> Click to enable this Machine")
+                        "", "&e> 点击以开启")
                     );
                     menu.addMenuClickHandler(6, (p, slot, item, action) -> {
                         BlockStorage.addBlockInfo(b, "enabled", String.valueOf(true));
@@ -91,7 +91,7 @@ public class AutoTableSaw extends SlimefunItem implements EnergyNetComponent {
                     });
                 } else {
                     menu.replaceExistingItem(6, new CustomItemStack(Material.REDSTONE, "&7Enabled: &2\u2714",
-                        "", "&e> Click to disable this Machine"));
+                        "", "&e> 点击以关闭"));
                     menu.addMenuClickHandler(6, (p, slot, item, action) -> {
                         BlockStorage.addBlockInfo(b, "enabled", String.valueOf(false));
                         newInstance(menu, b);
@@ -163,8 +163,8 @@ public class AutoTableSaw extends SlimefunItem implements EnergyNetComponent {
 
         borders(preset, border, inputBorder, outputBorder);
         preset.addItem(2, new CustomItemStack(new ItemStack(Material.STONECUTTER), "&eRecipe", "",
-                "&bPut in the Recipe you want to craft",
-                "&4Table Saw Recipes ONLY"
+                "&b放入你想制作的配方",
+                "&4只能放入切石机能制造的物品"
             ),
             ChestMenuUtils.getEmptyClickHandler());
     }

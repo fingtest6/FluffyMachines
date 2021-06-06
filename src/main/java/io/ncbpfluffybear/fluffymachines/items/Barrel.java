@@ -89,13 +89,13 @@ public class Barrel extends NonHopperableBlock implements HologramOwner {
                 if (BlockStorage.getLocationInfo(b.getLocation(), "stored") == null) {
 
                     menu.replaceExistingItem(STATUS_SLOT, new CustomItemStack(
-                        Material.LIME_STAINED_GLASS_PANE, "&6Items Stored: &e0" + " / " + MAX_STORAGE, "&70%"));
-                    menu.replaceExistingItem(DISPLAY_SLOT, new CustomItemStack(Material.BARRIER, "&cEmpty"));
+                        Material.LIME_STAINED_GLASS_PANE, "&6已储存物品: &e0" + " / " + MAX_STORAGE, "&70%"));
+                    menu.replaceExistingItem(DISPLAY_SLOT, new CustomItemStack(Material.BARRIER, "&c无物品"));
 
                     BlockStorage.addBlockInfo(b, "stored", "0");
 
                     if (showHologram.getValue()) {
-                        updateHologram(b, "&cEmpty");
+                        updateHologram(b, "&c无物品");
                     }
 
                 // Change hologram settings
@@ -111,10 +111,10 @@ public class Barrel extends NonHopperableBlock implements HologramOwner {
                 String holo = BlockStorage.getLocationInfo(b.getLocation(), "holo");
                 if (holo == null || holo.equals("true")) {
                     menu.replaceExistingItem(HOLOGRAM_TOGGLE_SLOT,
-                        new CustomItemStack(Material.QUARTZ_SLAB, "&3Toggle Hologram &a(On)"));
+                        new CustomItemStack(Material.QUARTZ_SLAB, "&3全息图像&c(开启)"));
                 } else {
                     menu.replaceExistingItem(HOLOGRAM_TOGGLE_SLOT,
-                        new CustomItemStack(Material.QUARTZ_SLAB, "&3Toggle Hologram &c(Off)"));
+                        new CustomItemStack(Material.QUARTZ_SLAB, "&3全息图像&c(关闭)"));
                 }
                 menu.addMenuClickHandler(HOLOGRAM_TOGGLE_SLOT, (pl, slot, item, action) -> {
                     toggleHolo(b);
@@ -123,8 +123,8 @@ public class Barrel extends NonHopperableBlock implements HologramOwner {
 
                 // Insert all
                 menu.replaceExistingItem(INSERT_ALL_SLOT,
-                    new CustomItemStack(Material.CYAN_STAINED_GLASS_PANE, "&bInsert All",
-                        "&7> Click here to insert all", "&7compatible items into the barrel"));
+                    new CustomItemStack(Material.CYAN_STAINED_GLASS_PANE, "&b放入全部",
+                        "&7> 点击我来放入全部", "&7把物品全部放入储存箱子内"));
                 menu.addMenuClickHandler(INSERT_ALL_SLOT, (pl, slot, item, action) -> {
                     insertAll(pl, menu, b);
                     return false;
@@ -132,8 +132,8 @@ public class Barrel extends NonHopperableBlock implements HologramOwner {
 
                 // Extract all
                 menu.replaceExistingItem(EXTRACT_ALL_SLOT,
-                    new CustomItemStack(Material.ORANGE_STAINED_GLASS_PANE, "&6Extract All",
-                        "&7> Click here to extract", "&7all items to your inventory"));
+                    new CustomItemStack(Material.ORANGE_STAINED_GLASS_PANE, "&6取出全部",
+                        "&7> 点击我来取出全部", "&7把物品全部取出到背包"));
                 menu.addMenuClickHandler(EXTRACT_ALL_SLOT, (pl, slot, item, action) -> {
                     extractAll(pl, menu, b);
                     return false;
@@ -181,7 +181,7 @@ public class Barrel extends NonHopperableBlock implements HologramOwner {
                     int itemCount = 0;
 
                     if (breakOnlyWhenEmpty.getValue() && stored != 0) {
-                        Utils.send(p, "&cThis barrel can't be broken since it has items inside it!");
+                        Utils.send(p, "&c请先把里面的物品拿走后再打破它!");
                         e.setCancelled(true);
                         return;
                     }
@@ -193,7 +193,7 @@ public class Barrel extends NonHopperableBlock implements HologramOwner {
                     }
 
                     if (itemCount > 5) {
-                        Utils.send(p, "&cPlease remove nearby items before breaking this barrel!");
+                        Utils.send(p, "&在打破它之前,最好先把里面的东西拿走!");
                         e.setCancelled(true);
                         return;
                     }
@@ -207,8 +207,8 @@ public class Barrel extends NonHopperableBlock implements HologramOwner {
 
                         if (stored > OVERFLOW_AMOUNT) {
 
-                            Utils.send(p, "&eThere are more than " + OVERFLOW_AMOUNT + " items in this barrel! " +
-                                "Dropping " + OVERFLOW_AMOUNT + " items instead!");
+                            Utils.send(p, "&e还有" + OVERFLOW_AMOUNT + "个在这里! " +
+                                "Dropping " + OVERFLOW_AMOUNT + "物品!");
                             int toRemove = OVERFLOW_AMOUNT;
                             while (toRemove >= stackSize) {
 
@@ -399,8 +399,8 @@ public class Barrel extends NonHopperableBlock implements HologramOwner {
         // This helps a bit with lag, but may have visual impacts
         if (inv.hasViewer() || force) {
             inv.replaceExistingItem(STATUS_SLOT, new CustomItemStack(
-                Material.LIME_STAINED_GLASS_PANE, "&6Items Stored: &e" + stored + " / " + MAX_STORAGE,
-                "&b" + storedStacks + " Stacks &8| &7" + storedPercent + "&7%"));
+                Material.LIME_STAINED_GLASS_PANE, "&6已储存物品: &e" + stored + " / " + MAX_STORAGE,
+                "&b" + storedStacks + "组 &8| &7" + storedPercent + "&7%"));
         }
 
         if (inv.getItemInSlot(DISPLAY_SLOT) != null && inv.getItemInSlot(DISPLAY_SLOT).getItemMeta().hasDisplayName()) {
@@ -414,9 +414,9 @@ public class Barrel extends NonHopperableBlock implements HologramOwner {
         }
 
         if (stored == 0) {
-            inv.replaceExistingItem(DISPLAY_SLOT, new CustomItemStack(Material.BARRIER, "&cEmpty"));
+            inv.replaceExistingItem(DISPLAY_SLOT, new CustomItemStack(Material.BARRIER, "&c无物品"));
             if (showHologram.getValue() && (hasHolo == null || hasHolo.equals("true"))) {
-                updateHologram(b, "&cEmpty");
+                updateHologram(b, "&c无物品");
             }
         }
     }

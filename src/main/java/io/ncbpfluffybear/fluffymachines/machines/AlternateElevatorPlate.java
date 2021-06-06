@@ -58,7 +58,7 @@ public class AlternateElevatorPlate extends SimpleSlimefunItem<BlockUseHandler> 
             @Override
             public void onPlayerPlace(@Nonnull BlockPlaceEvent e) {
                 Block b = e.getBlock();
-                BlockStorage.addBlockInfo(b, DATA_KEY, "&fFloor #0");
+                BlockStorage.addBlockInfo(b, DATA_KEY, "&f楼层 #0");
                 BlockStorage.addBlockInfo(b, "owner", e.getPlayer().getUniqueId().toString());
             }
         };
@@ -165,9 +165,9 @@ public class AlternateElevatorPlate extends SimpleSlimefunItem<BlockUseHandler> 
 
     @ParametersAreNonnullByDefault
     public void openEditor(Player p, Block b) {
-        ChestMenu menu = new ChestMenu("Elevator Settings");
+        ChestMenu menu = new ChestMenu("电梯设置");
 
-        menu.addItem(4, new CustomItemStack(Material.NAME_TAG, "&7Floor Name &e(Click to edit)", "",
+        menu.addItem(4, new CustomItemStack(Material.NAME_TAG, "&7设置楼层名字&e(点击我)", "",
             "&f" + ChatColors.color(BlockStorage.getLocationInfo(b.getLocation(), DATA_KEY))));
         menu.addMenuClickHandler(4, (pl, slot, item, action) -> {
             pl.closeInventory();

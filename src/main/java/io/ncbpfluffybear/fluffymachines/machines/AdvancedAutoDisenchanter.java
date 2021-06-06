@@ -64,7 +64,7 @@ public class AdvancedAutoDisenchanter extends SlimefunItem implements EnergyNetC
     private static final NamespacedKey selection = new NamespacedKey(FluffyMachines.getInstance(), "selection");
 
     private static final ItemStack selectionItem = new CustomItemStack(Material.ENCHANTED_BOOK,
-        "&6Selected Enchant", "&a> Click here to cycle through enchants", "&5Current Enchant: None");
+        "&6驱魔属性", "&a> 点击我开始", "&5驱魔类型:无");
 
     private static final ItemStack progressItem = new CustomItemStack(Material.EXPERIENCE_BOTTLE, "&aProgress");
 
@@ -80,7 +80,7 @@ public class AdvancedAutoDisenchanter extends SlimefunItem implements EnergyNetC
 
         addItemHandler(onBreak());
 
-        new BlockMenuPreset(getId(), "&cAdvanced Auto Disenchanter") {
+        new BlockMenuPreset(getId(), "&c高级全自动驱魔机") {
 
             @Override
             public void init() {
@@ -288,12 +288,12 @@ public class AdvancedAutoDisenchanter extends SlimefunItem implements EnergyNetC
                 selectionIndex++; // 0
                 meta.getPersistentDataContainer().set(selection, PersistentDataType.INTEGER, selectionIndex);
 
-                lore.set(1, ChatColor.DARK_PURPLE + "Current Enchant: " +  ChatColor.YELLOW + enchants.get(selectionIndex)); // 0
+                lore.set(1, ChatColor.DARK_PURPLE + "当前驱魔: " +  ChatColor.YELLOW + enchants.get(selectionIndex)); // 0
 
             } else {
                 selectionIndex = 0;
                 meta.getPersistentDataContainer().set(selection, PersistentDataType.INTEGER, selectionIndex);
-                lore.set(1, ChatColor.DARK_PURPLE + "Current Enchant: " + ChatColor.YELLOW + enchants.get(0));
+                lore.set(1, ChatColor.DARK_PURPLE + "当前驱魔: " + ChatColor.YELLOW + enchants.get(0));
             }
             meta.setLore(lore);
             clickedItem.setItemMeta(meta);
