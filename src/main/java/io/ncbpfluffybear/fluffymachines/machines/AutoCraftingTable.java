@@ -58,7 +58,7 @@ public class AutoCraftingTable extends SlimefunItem implements EnergyNetComponen
     public AutoCraftingTable(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, recipeType, recipe);
 
-        new BlockMenuPreset(getId(), "&6Auto Crafting Table") {
+        new BlockMenuPreset(getId(), "&6全自动工作台(原版)") {
 
             @Override
             public void init() {
@@ -70,20 +70,20 @@ public class AutoCraftingTable extends SlimefunItem implements EnergyNetComponen
                 if (!BlockStorage.hasBlockInfo(b)
                     || BlockStorage.getLocationInfo(b.getLocation(), "enabled") == null
                     || BlockStorage.getLocationInfo(b.getLocation(), "enabled").equals(String.valueOf(false))) {
-                    menu.replaceExistingItem(4, new CustomItem(Material.GUNPOWDER, "&7Enabled: &4\u2718",
-                        "", "&e> Click to enable this Machine")
+                    menu.replaceExistingItem(4, new CustomItem(Material.GUNPOWDER, "&7类型: &4\u2718",
+                        "", "&e> 点击以启用")
                     );
                     menu.replaceExistingItem(statusSlot,
                         new CustomItem(new ItemStack(Material.GRAY_STAINED_GLASS_PANE),
-                            "&7&lDisabled"));
+                            "&7&l禁用"));
                     menu.addMenuClickHandler(4, (p, slot, item, action) -> {
                         BlockStorage.addBlockInfo(b, "enabled", String.valueOf(true));
                         newInstance(menu, b);
                         return false;
                     });
                 } else {
-                    menu.replaceExistingItem(4, new CustomItem(Material.REDSTONE, "&7Enabled: &2\u2714",
-                        "", "&e> Click to disable this Machine"));
+                    menu.replaceExistingItem(4, new CustomItem(Material.REDSTONE, "&7类型: &2\u2714",
+                        "", "&e> 点击以禁用"));
                     menu.addMenuClickHandler(4, (p, slot, item, action) -> {
                         BlockStorage.addBlockInfo(b, "enabled", String.valueOf(false));
                         newInstance(menu, b);
@@ -175,11 +175,11 @@ public class AutoCraftingTable extends SlimefunItem implements EnergyNetComponen
         AutoAncientAltar.borders(preset, border, inputBorder, outputBorder);
 
         for (int i : keyBorder) {
-            preset.addItem(i, new CustomItem(new ItemStack(Material.YELLOW_STAINED_GLASS_PANE), "&e&lKey Item Slot"),
+            preset.addItem(i, new CustomItem(new ItemStack(Material.YELLOW_STAINED_GLASS_PANE), "&e&l所要制造物品槽"),
                 (p, slot, item, action) -> false);
         }
 
-        preset.addItem(statusSlot, new CustomItem(new ItemStack(Material.YELLOW_STAINED_GLASS_PANE), "&e&lIdle"),
+        preset.addItem(statusSlot, new CustomItem(new ItemStack(Material.YELLOW_STAINED_GLASS_PANE), "&e&l闲置"),
             (p, slot, item, action) -> false);
 
         for (int i : getOutputSlots()) {
@@ -199,9 +199,9 @@ public class AutoCraftingTable extends SlimefunItem implements EnergyNetComponen
             });
         }
 
-        preset.addItem(2, new CustomItem(new ItemStack(Material.CRAFTING_TABLE), "&eRecipe", "",
-                "&bPut in the Recipe you want to craft", "&ePut in the item you want crafted",
-                "&4Vanilla Crafting Table Recipes ONLY"
+        preset.addItem(2, new CustomItem(new ItemStack(Material.CRAFTING_TABLE), "&e配方", "",
+                "&b放入你想要制造的配方", "&e再放入所要制作物品",
+                "&4只能合成原版工作台合成的物品"
             ),
             (p, slot, item, action) -> false);
     }
