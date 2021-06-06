@@ -44,11 +44,11 @@ public class Events implements Listener {
     @EventHandler
     public void onAdminJoin(PlayerJoinEvent e) {
         if (e.getPlayer().isOp() && !Constants.SLIMEFUN_UPDATED) {
-            Utils.send(e.getPlayer(), "&cYou are running a version of Slimefun before DEV 844, RC version of Slimefun " +
-                "or running a custom build. FluffyMachines requires you to update your Slimefun version so that " +
-                "barrels remain functional. Update before 4/15/2021, or players may encounter issues with " +
-                "FluffyMachines that I am not accountable for. Add ignore-outdated-warning: false to the " +
-                "FluffyMachines config to stop receiving this warning.");
+            Utils.send(e.getPlayer(), "&c您运行的是DEV 844之前的Slimefun版本，RC版本的Slimefun" +
+                "或运行生成。FluffyMachines要求您更新Slimefun版本，以便" +
+                "储存箱子可以正常工作。在2021年4月15日前更新，否则玩家可能会遇到问题" +
+                "我不负责的毛绒机。将忽略过期警告：false添加到" +
+                "FluffyMachines配置为停止接收此警告.");
         }
     }
 
@@ -74,8 +74,8 @@ public class Events implements Listener {
             e.setCancelled(true);
             Entity target = e.getRightClicked();
             if (target instanceof Player && WateringCan.updateUses(wateringCan, p, item, 3)) {
-                Utils.send(p, "&bSplash!");
-                Utils.send((Player) target, "&bYou were splashed by " + p.getDisplayName() + "!");
+                Utils.send(p, "&b喷水!");
+                Utils.send((Player) target, "&b你被水溅到了" + p.getDisplayName() + "!");
                 ((Player) target).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 60, 1));
             }
         }
@@ -191,9 +191,9 @@ public class Events implements Listener {
             p.closeInventory();
 
             if (e.getClick() == ClickType.LEFT) {
-                Utils.send(p, "&7Wiki Link: https://github.com/NCBPFluffyBear/FluffyMachines/blob/master/README.md");
+                Utils.send(p, "&7Wiki地址: https://github.com/NCBPFluffyBear/FluffyMachines/blob/master/README.md");
             } else if (e.getClick() == ClickType.RIGHT) {
-                Utils.send(p, "&7Report Bugs: https://github.com/NCBPFluffyBear/FluffyMachines/issues");
+                Utils.send(p, "&7反馈Bugs地址: https://github.com/NCBPFluffyBear/FluffyMachines/issues");
             }
         }
     }
@@ -202,7 +202,7 @@ public class Events implements Listener {
     public void onExtractionNodePlace(BlockPlaceEvent e) {
         if ((e.getBlock().getY() != e.getBlockAgainst().getY() || e.getBlockAgainst().getType() != Material.ENDER_CHEST)
             && isExtractionNode(e.getItemInHand())) {
-            Utils.send(e.getPlayer(), "&cYou can only place this on an Ender Chest!");
+            Utils.send(e.getPlayer(), "&c你只能把这个放在末影箱旁边!");
             e.setCancelled(true);
         }
     }
