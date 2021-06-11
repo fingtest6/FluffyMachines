@@ -59,7 +59,7 @@ public class Foundry extends MultiBlockMachine {
                 BlockStorage.addBlockInfo(b, "stand", String.valueOf(lavaStand.getUniqueId()));
                 BlockStorage.addBlockInfo(b, "ignited", "true");
             } else {
-                Utils.send(p, "&c这个炉子还需要岩浆!");
+                Utils.send(p, "&c这个炉子还需要放置岩浆!");
             }
         } else if (BlockStorage.getLocationInfo(b.getLocation(), "ignited") != null) {
             Furnace furnace = (Furnace) b.getState();
