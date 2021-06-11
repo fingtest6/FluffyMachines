@@ -350,7 +350,7 @@ public class SuperheatedFurnace extends NonHopperableBlock {
 
         }
         inv.replaceExistingItem(DUST_INDICATOR, new CustomItem(new ItemStack(Material.GUNPOWDER), "&6可用粉尘: &e" + stored, "&a> &e左键单击&a此处取出1个", "&a> &e右键单击&a此处取出64个"));
-        inv.replaceExistingItem(INGOT_INDICATOR, new CustomItem(new ItemStack(Material.IRON_INGOT), "&6可用锭: &e" + stored, "&a> &e左键单击&a此处取出1粉", "&a> &e右键单击&a此处取出64个"));
+        inv.replaceExistingItem(INGOT_INDICATOR, new CustomItem(new ItemStack(Material.IRON_INGOT), "&6可用锭: &e" + stored, "&a> &e左键单击&a此处取出1个", "&a> &e右键单击&a此处取出64个"));
 
 
     }
