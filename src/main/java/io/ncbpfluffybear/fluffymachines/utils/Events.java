@@ -45,9 +45,9 @@ public class Events implements Listener {
     public void onAdminJoin(PlayerJoinEvent e) {
         if (e.getPlayer().isOp() && !Constants.SLIMEFUN_UPDATED) {
             Utils.send(e.getPlayer(), "&c您运行的是DEV 844之前的Slimefun版本，RC版本的Slimefun" +
-                "或运行生成。FluffyMachines要求您更新Slimefun版本，以便" +
-                "储存箱子可以正常工作。在2021年4月15日前更新，否则玩家可能会遇到问题" +
-                "我不负责的毛绒机。将忽略过期警告：false添加到" +
+                "FluffyMachines要求您更新Slimefun版本，" +
+                "以便让储存箱子可以正常工作，请更新到210415后续版本，否则玩家可能会遇到问题" +
+                "如果您未更改，我将不负责蓬松机器，我也将忽略过期警告：false添加到" +
                 "FluffyMachines配置为停止接收此警告.");
         }
     }
@@ -162,7 +162,7 @@ public class Events implements Listener {
                     p.spawnParticle(Particle.DRAGON_BREATH, p.getLocation(), 10);
 
                 } else {
-                    Utils.send(p, "&cMissing destination Warp Pad!");
+                    Utils.send(p, "&c缺少传送装置!");
 
                 }
             }

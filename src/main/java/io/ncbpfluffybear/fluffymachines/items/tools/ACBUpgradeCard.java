@@ -58,7 +58,7 @@ public class ACBUpgradeCard extends SimpleSlimefunItem<ItemHandler> {
             // Increment the tier by 1
             int tier = Integer.parseInt(BlockStorage.getLocationInfo(b.getLocation(), "tier"));
             if (tier == 100) {
-                Utils.send(e.getPlayer(), "&c该高级充电台最高(等级100)");
+                Utils.send(e.getPlayer(), "&c该高级充电台最高等级(100)");
                 return;
             }
             tier++;
