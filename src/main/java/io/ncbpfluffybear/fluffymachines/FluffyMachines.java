@@ -123,17 +123,17 @@ public class FluffyMachines extends JavaPlugin implements SlimefunAddon {
                 int parsedVersion = Integer.parseInt(matcher.group(2));
                 if (parsedVersion < 844) {
                     getLogger().log(Level.INFO, ChatColor.YELLOW + "您运行的是DEV 844之前的Slimefun版本. " +
-                        "FluffyMachines要求您更新Slimefun版本，以便让储存箱子保持功能. " +
-                        "在2021年4月15日之前更新，否则玩家可能会遇到蓬松机的各种问题" +
-                        "我永不负责.");
+                        "FluffyMachines要求您更新Slimefun版本，以便让储存箱子保持正常工作. " +
+                        "请更换210415后续版本，否则玩家可能会遇到蓬松机器的各种问题." +
+                        "如果您未更改，我将不负责蓬松机器.");
                 } else {
                     Constants.SLIMEFUN_UPDATED = true;
                 }
             } else {
                 getLogger().log(Level.INFO, ChatColor.YELLOW + "你正在运行一个RC版本的Slimefun" +
-                    "机器可能会失效,FluffyMachines要求您更新Slimefun版本，以便" +
-                    "桶可以正常工作,在2021年4月15日前更新，否则玩家可能会遇到问题" +
-                    "我永不负责的蓬松机");
+                    "FluffyMachines要求您更新Slimefun版本，以便让储存箱子保持正常工作." +
+                    "请更换210415后续版本，否则玩家可能会遇到蓬松机器的各种问题." +
+                    "如果您未更改，我将不负责蓬松机器.");
             }
         } catch (NumberFormatException e) {
             return;
