@@ -90,7 +90,7 @@ public class Barrel extends NonHopperableBlock implements HologramOwner {
                 if (BlockStorage.getLocationInfo(b.getLocation(), "stored") == null) {
 
                     menu.replaceExistingItem(STATUS_SLOT, new CustomItem(
-                        Material.LIME_STAINED_GLASS_PANE, "&6Items Stored: &e0" + " / " + MAX_STORAGE, "&70%"));
+                        Material.LIME_STAINED_GLASS_PANE, "&6已储存物品: &e0" + " / " + MAX_STORAGE, "&70%"));
                     menu.replaceExistingItem(DISPLAY_SLOT, new CustomItem(Material.BARRIER, "&c无物品"));
 
                     BlockStorage.addBlockInfo(b, "stored", "0");
