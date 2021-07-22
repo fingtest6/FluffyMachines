@@ -112,7 +112,7 @@ public class Barrel extends NonHopperableBlock implements HologramOwner {
                 String holo = BlockStorage.getLocationInfo(b.getLocation(), "holo");
                 if (holo == null || holo.equals("true")) {
                     menu.replaceExistingItem(HOLOGRAM_TOGGLE_SLOT,
-                        new CustomItem(Material.QUARTZ_SLAB, "&3Toggle Hologram &a(On)"));
+                        new CustomItem(Material.QUARTZ_SLAB, "&3全息图像&a(开启)"));
                 } else {
                     menu.replaceExistingItem(HOLOGRAM_TOGGLE_SLOT,
                         new CustomItem(Material.QUARTZ_SLAB, "&3全息图像&c(关闭)"));
