@@ -44,11 +44,12 @@ public class Events implements Listener {
     @EventHandler
     public void onAdminJoin(PlayerJoinEvent e) {
         if (e.getPlayer().isOp() && !Constants.SLIMEFUN_UPDATED) {
-            Utils.send(e.getPlayer(), "&c您运行的是DEV 844之前的Slimefun版本，RC版本的Slimefun" +
+            Utils.send(e.getPlayer(), "&c您运行的是DEV 844之前的Slimefun版本/RC版本的Slimefun." +
                 "FluffyMachines要求您更新Slimefun版本，" +
-                "以便让储存箱子可以正常工作，请更新到210415后续版本，否则玩家可能会遇到问题" +
-                "如果您未更改，我将不负责蓬松机器，我也将忽略过期警告：false添加到" +
-                "FluffyMachines配置为停止接收此警告.");
+                "以便让储存箱子可以正常工作，请更新到210415后续版本，否则玩家可能会遇到问题." +
+                "如果您未更改，作者将不负责蓬松机器，您也可以忽略这条报错:" +
+                "FluffyMachines文件夹内的config.yml里面改成ignore-outdated-warning: true" +
+                "如果您使用的是汉化版 请忽略这条报错(但请更新到最新).");
         }
     }
 
