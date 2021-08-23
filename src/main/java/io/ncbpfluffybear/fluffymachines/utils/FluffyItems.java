@@ -93,7 +93,7 @@ public class FluffyItems {
 
     public static final SlimefunItemStack LARGE_FLUFFY_BARREL = new SlimefunItemStack("LARGE_FLUFFY_BARREL",
         Material.LODESTONE,
-        "&a四阶蓬松箱子l",
+        "&a四阶蓬松箱子",
         "",
         "&7可以储存大量物品",
         "&c请不要用爆炸工具打破...",

@@ -112,7 +112,7 @@ public class FluffyMachines extends JavaPlugin implements SlimefunAddon {
 
         // Register McMMO Events
         if (getServer().getPluginManager().isPluginEnabled("McMMO")) {
-            Bukkit.getLogger().log(Level.INFO, "McMMO found!");
+            Bukkit.getLogger().log(Level.INFO, "对McMMO建立成功!");
             getServer().getPluginManager().registerEvents(new McMMOEvents(), this);
         }
 
@@ -147,7 +147,7 @@ public class FluffyMachines extends JavaPlugin implements SlimefunAddon {
 
         final Metrics metrics = new Metrics(this, 8927);
 
-        getLogger().log(Level.INFO, ChatColor.GREEN + "你好！要与共享服务器到" +
+        getLogger().log(Level.INFO, ChatColor.GREEN + "你好！要共享服务器到" +
             "Slimefun社区吗?");
         getLogger().log(Level.INFO, ChatColor.GREEN + "加入官方Slimefun服务器" +
             "https://discord.gg/slimefun");
