@@ -109,8 +109,8 @@ public class AutoAncientAltar extends SlimefunItem implements EnergyNetComponent
                     });
                 }
 
-                menu.replaceExistingItem(7, new CustomItemStack(Material.ENCHANTING_TABLE, "&cCraft Once",
-                    "", "&e> 单击制作一个")
+                menu.replaceExistingItem(7, new CustomItemStack(Material.ENCHANTING_TABLE, "&c制作一次",
+                    "", "&e> 单击制作一次")
                 );
                 menu.addMenuClickHandler(7, (p, slot, item, action) -> {
                     BlockStorage.addBlockInfo(b, "craftOnce", String.valueOf(true));
