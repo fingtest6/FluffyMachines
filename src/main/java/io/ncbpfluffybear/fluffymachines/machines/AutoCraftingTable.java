@@ -319,7 +319,7 @@ public class AutoCraftingTable extends SlimefunItem implements EnergyNetComponen
                 if (menu.hasViewer()) {
                     menu.replaceExistingItem(statusSlot,
                         new CustomItemStack(new ItemStack(Material.RED_STAINED_GLASS_PANE),
-                            "&c&lYou need to have enough supplies", "&c&lto craft more than one item"));
+                            "&c&l你需要放入更多物品", "&c&l来制造更多物品"));
                 }
                 return;
             }
