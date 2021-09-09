@@ -255,7 +255,7 @@ public class AutoCraftingTable extends SlimefunItem implements EnergyNetComponen
             BlockMenu menu = BlockStorage.getInventory(block);
             if (menu.hasViewer()) {
                 menu.replaceExistingItem(statusSlot, new CustomItemStack(new ItemStack(Material.RED_STAINED_GLASS_PANE),
-                    "&c&lNo Power"));
+                    "&c&l电量不足"));
             }
             return;
         }
