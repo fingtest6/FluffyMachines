@@ -219,8 +219,8 @@ public class AutoAncientAltar extends SlimefunItem implements EnergyNetComponent
             });
         }
 
-        preset.addItem(2, new CustomItemStack(new ItemStack(Material.ENCHANTING_TABLE), "&eRecipe",
-                "", "&b把你想要的配方放入里面", "&4只能合成远古祭坛的物品"
+        preset.addItem(2, new CustomItemStack(new ItemStack(Material.ENCHANTING_TABLE), "&e使用方法",
+                "", "&b把将要制作的物品配方放入里面", "&4只能合成远古祭坛的物品"
             ),
             (p, slot, item, action) -> false);
     }

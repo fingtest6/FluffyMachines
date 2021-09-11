@@ -184,8 +184,8 @@ public class AutoCrafter extends SlimefunItem implements EnergyNetComponent {
             });
         }
 
-        preset.addItem(2, new CustomItemStack(new ItemStack(material), "&eRecipe",
-                "", "&b放入你想要制造的配方", machineName + "合成的物品"
+        preset.addItem(2, new CustomItemStack(new ItemStack(material), "&e使用方法",
+                "", "&b把将要制作的物品配方放入里面", machineName + "的物品"
             ),
             (p, slot, item, action) -> false);
     }

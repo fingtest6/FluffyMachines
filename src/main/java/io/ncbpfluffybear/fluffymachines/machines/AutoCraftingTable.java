@@ -199,8 +199,8 @@ public class AutoCraftingTable extends SlimefunItem implements EnergyNetComponen
             });
         }
 
-        preset.addItem(2, new CustomItemStack(new ItemStack(Material.CRAFTING_TABLE), "&e闲置", "",
-                "&b放入你想要制造的配方", "&e再放入所要制作物品",
+        preset.addItem(2, new CustomItemStack(new ItemStack(Material.CRAFTING_TABLE), "&e使用方法", "",
+                "&b放入物品,而不是物品的配方", "&e再放入所要制作物品的配方",
                 "&4只能合成原版工作台合成的物品"
             ),
             (p, slot, item, action) -> false);
@@ -285,7 +285,7 @@ public class AutoCraftingTable extends SlimefunItem implements EnergyNetComponen
         if (keyItem == null) {
             if (menu.hasViewer()) {
                 menu.replaceExistingItem(statusSlot, new CustomItemStack(new ItemStack(Material.RED_STAINED_GLASS_PANE),
-                    "&c&l缺少配方(放入物品,而不是物品配方)"));
+                    "&c&l缺少配方(放入物品,而不是物品的配方)"));
             }
             return;
         }

@@ -162,9 +162,9 @@ public class AutoTableSaw extends SlimefunItem implements EnergyNetComponent {
     protected void constructMenu(BlockMenuPreset preset) {
 
         borders(preset, border, inputBorder, outputBorder);
-        preset.addItem(2, new CustomItemStack(new ItemStack(Material.STONECUTTER), "&eRecipe", "",
-                "&b放入你想制作的配方",
-                "&4只能放入切石机能制造的物品"
+        preset.addItem(2, new CustomItemStack(new ItemStack(Material.STONECUTTER), "&e使用方法", "",
+                "&b把将要制作的物品配方放入里面",
+                "&4只能合成切石机的物品"
             ),
             ChestMenuUtils.getEmptyClickHandler());
     }

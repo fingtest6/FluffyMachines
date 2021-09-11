@@ -66,7 +66,7 @@ public class AdvancedAutoDisenchanter extends SlimefunItem implements EnergyNetC
     private static final ItemStack selectionItem = new CustomItemStack(Material.ENCHANTED_BOOK,
         "&6驱魔属性", "&a> 点击我开始", "&5驱魔类型:无");
 
-    private static final ItemStack progressItem = new CustomItemStack(Material.EXPERIENCE_BOTTLE, "&aProgress");
+    private static final ItemStack progressItem = new CustomItemStack(Material.EXPERIENCE_BOTTLE, "&a进度");
 
 
     static {
