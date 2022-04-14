@@ -31,6 +31,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
+import net.guizhanss.guizhanlib.minecraft.helper.enchantments.EnchantmentHelper;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -305,7 +306,7 @@ public class AdvancedAutoDisenchanter extends SlimefunItem implements EnergyNetC
     private void buildAndSetSelectionItem(Map<Enchantment, Integer> disenchants, BlockMenu menu, int selectionIndex) {
         List<String> lore = new ArrayList<>();
 
-        lore.add(Utils.color("&e> 点击切换附魔 <"));
+        lore.add(Utils.color("&e> 点击切换需要提取的附魔 <"));
         lore.add("");
 
         if (selectionIndex == -1) {
@@ -322,10 +323,13 @@ public class AdvancedAutoDisenchanter extends SlimefunItem implements EnergyNetC
                 textColor = ChatColor.GREEN;
             }
 
-            lore.add(textColor + WordUtils.capitalizeFully("- " + disenchantKeys[i].getKey()
-                .getKey().replace('_', ' ')) + " "
-                + Utils.toRoman(disenchants.get(disenchantKeys[i]))
-            );
+            String ench = textColor +
+                "- " +
+                EnchantmentHelper.getEnchantmentName(disenchantKeys[i], false) +
+                " " +
+                Utils.toRoman(disenchants.get(disenchantKeys[i]));
+
+            lore.add(ench);
         }
 
         setSelectionItem(menu, lore);
