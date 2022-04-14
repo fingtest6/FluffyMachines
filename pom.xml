@@ -62,6 +62,7 @@
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.2.4</version>
                 <configuration>
+                    <minimizeJar>true</minimizeJar>
                     <relocations>
                         <relocation>
                             <pattern>org.bstats</pattern>
@@ -70,6 +71,10 @@
                         <relocation>
                             <pattern>com.github.Slimefun-Addon-Community.extrautils</pattern>
                             <shadedPattern>io.ncbpfluffybear.shaded.extrautils</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>net.guizhanss.guizhanlib</pattern>
+                            <shadedPattern>io.ncbpfluffybear.shaded.guizhanlib</shadedPattern>
                         </relocation>
                     </relocations>
 
@@ -161,7 +166,7 @@
         <dependency>
             <groupId>net.guizhanss</groupId>
             <artifactId>GuizhanLib</artifactId>
-            <version>0.8.5</version>
+            <version>91310a97f3</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

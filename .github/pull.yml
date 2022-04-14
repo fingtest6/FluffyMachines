@@ -1,0 +1,11 @@
+version: "1"
+rules:
+  - base: master
+    upstream: NCBPFluffyBear:master
+    mergeMethod: merge
+    assignees:
+      - ybw0014
+      - baoad
+    conflictReviewers:
+      - ybw0014
+      - baoad
