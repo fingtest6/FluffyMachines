@@ -17,11 +17,13 @@ import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
 import io.ncbpfluffybear.fluffymachines.utils.FluffyItems;
 import io.ncbpfluffybear.fluffymachines.utils.Utils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Nonnull;
+
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
@@ -63,7 +65,7 @@ public class AdvancedAutoDisenchanter extends SlimefunItem implements EnergyNetC
     private static final Map<BlockPosition, Integer> progress = new HashMap<>();
 
     private static final ItemStack DEFAULT_SELECTION_ITEM = new CustomItemStack(Material.ENCHANTED_BOOK,
-            "&5附魔选择器", "", "&e> 点进重新扫描 <");
+        "&5附魔选择器", "", "&e> 点进重新扫描 <");
 
     private static final ItemStack PROGRESS_ITEM = new CustomItemStack(Material.EXPERIENCE_BOTTLE, "&a处理中");
 
@@ -103,8 +105,8 @@ public class AdvancedAutoDisenchanter extends SlimefunItem implements EnergyNetC
             @Override
             public boolean canOpen(@Nonnull Block b, @Nonnull Player p) {
                 return (p.hasPermission("slimefun.inventory.bypass")
-                        || Slimefun.getProtectionManager().hasPermission(
-                        p, b.getLocation(), Interaction.INTERACT_BLOCK));
+                    || Slimefun.getProtectionManager().hasPermission(
+                    p, b.getLocation(), Interaction.INTERACT_BLOCK));
             }
 
             @Override
@@ -116,9 +118,9 @@ public class AdvancedAutoDisenchanter extends SlimefunItem implements EnergyNetC
             public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
                 if (flow == ItemTransportFlow.INSERT) {
                     if (item.getType() == Material.BOOK) {
-                        return new int[]{BOOK_SLOT};
+                        return new int[] {BOOK_SLOT};
                     } else {
-                        return new int[]{ITEM_SLOT};
+                        return new int[] {ITEM_SLOT};
                     }
                 } else if (flow == ItemTransportFlow.WITHDRAW) {
                     return OUTPUT_SLOTS;
@@ -190,14 +192,14 @@ public class AdvancedAutoDisenchanter extends SlimefunItem implements EnergyNetC
         // Validate input
         SlimefunItem sfItem = SlimefunItem.getByItem(input);
         if (input == null || input.getEnchantments().isEmpty()
-                || sfItem != null && !sfItem.isDisenchantable()
+            || sfItem != null && !sfItem.isDisenchantable()
         ) {
             return;
         }
 
         // Check for ancient book
         if (!SlimefunUtils.isItemSimilar(inv.getItemInSlot(BOOK_SLOT),
-                FluffyItems.ANCIENT_BOOK.getItem().getItem(), false, false)
+            FluffyItems.ANCIENT_BOOK.getItem().getItem(), false, false)
         ) {
             return;
         }
@@ -207,7 +209,7 @@ public class AdvancedAutoDisenchanter extends SlimefunItem implements EnergyNetC
             progress.put(pos, ++currentProgress);
 
             ChestMenuUtils.updateProgressbar(inv, PROGRESS_SLOT, PROCESS_TIME_TICKS - currentProgress,
-                    PROCESS_TIME_TICKS, PROGRESS_ITEM);
+                PROCESS_TIME_TICKS, PROGRESS_ITEM);
 
             removeCharge(b.getLocation(), ENERGY_CONSUMPTION);
 
@@ -242,7 +244,7 @@ public class AdvancedAutoDisenchanter extends SlimefunItem implements EnergyNetC
         progress.put(pos, 0);
         currentProgress = progress.getOrDefault(pos, 0);
         ChestMenuUtils.updateProgressbar(inv, PROGRESS_SLOT, PROCESS_TIME_TICKS - currentProgress,
-                PROCESS_TIME_TICKS, PROGRESS_ITEM);
+            PROCESS_TIME_TICKS, PROGRESS_ITEM);
         setSelectedIndex(b, -2); // Set selection to "Reload"
         inv.replaceExistingItem(SELECTION_SLOT, DEFAULT_SELECTION_ITEM.clone()); // Reset selection item
     }
@@ -255,9 +257,9 @@ public class AdvancedAutoDisenchanter extends SlimefunItem implements EnergyNetC
         List<String> lore = new ArrayList<>();
 
         if (inv.getItemInSlot(ITEM_SLOT) == null) {
-            lore.add(Utils.color("&cPlace an item into the item slot first"));
+            lore.add(Utils.color("&c请放入物品"));
             lore.add("");
-            lore.add(Utils.color("&e> Click to rescan input slot <"));
+            lore.add(Utils.color("&e> 点击重新扫描 <"));
             setSelectionItem(inv, lore);
             setSelectedIndex(b, -2);
             return;
@@ -265,9 +267,9 @@ public class AdvancedAutoDisenchanter extends SlimefunItem implements EnergyNetC
 
         // Can't disenchant item
         if (itemEnchants.isEmpty()) {
-            lore.add(Utils.color("&cThis item has no available disenchants!"));
+            lore.add(Utils.color("&c该物品没有可用的附魔!"));
             lore.add("");
-            lore.add(Utils.color("&e> Click to rescan input slot <"));
+            lore.add(Utils.color("&e> 点击重新扫描 <"));
             setSelectionItem(inv, lore);
             setSelectedIndex(b, -2);
             return;
@@ -303,13 +305,13 @@ public class AdvancedAutoDisenchanter extends SlimefunItem implements EnergyNetC
     private void buildAndSetSelectionItem(Map<Enchantment, Integer> disenchants, BlockMenu menu, int selectionIndex) {
         List<String> lore = new ArrayList<>();
 
-        lore.add(Utils.color("&e> Click to cycle through enchants <"));
+        lore.add(Utils.color("&e> 点击切换附魔 <"));
         lore.add("");
 
         if (selectionIndex == -1) {
-            lore.add(Utils.color("&a- None"));
+            lore.add(Utils.color("&a- 无"));
         } else {
-            lore.add(Utils.color("&c- None"));
+            lore.add(Utils.color("&c- 无"));
         }
 
         Enchantment[] disenchantKeys = disenchants.keySet().toArray(new Enchantment[0]); // Get indexed disenchants
@@ -321,8 +323,8 @@ public class AdvancedAutoDisenchanter extends SlimefunItem implements EnergyNetC
             }
 
             lore.add(textColor + WordUtils.capitalizeFully("- " + disenchantKeys[i].getKey()
-                    .getKey().replace('_', ' ')) + " "
-                    + Utils.toRoman(disenchants.get(disenchantKeys[i]))
+                .getKey().replace('_', ' ')) + " "
+                + Utils.toRoman(disenchants.get(disenchantKeys[i]))
             );
         }
 

@@ -36,12 +36,12 @@ public class WaterSprinkler extends AbstractGrowthAccelerator {
     private static final int RADIUS = 2;
     private static final int PROGRESS_SLOT = 4;
     private static final CustomItemStack noWaterItem = new CustomItemStack(Material.BUCKET,
-        "&c没有找到水",
+        "&c没有找到水源",
         "",
-        "&c请把水放在洒水器下面!"
+        "&c洒水机下方必须是水源!"
     );
     private static final CustomItemStack waterFoundItem = new CustomItemStack(Material.WATER_BUCKET,
-        "&b检测到水"
+        "&b已找到水源"
     );
     private final ItemSetting<Boolean> particles = new ItemSetting<>(this, "particles", true);
 

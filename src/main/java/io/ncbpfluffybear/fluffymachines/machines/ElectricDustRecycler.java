@@ -92,7 +92,7 @@ public class ElectricDustRecycler extends AContainer implements RecipeDisplayIte
     @Nonnull
     @Override
     public String getInventoryTitle() {
-        return "&f粉尘回收器";
+        return "&f矿粉回收机";
     }
 
     @Nonnull

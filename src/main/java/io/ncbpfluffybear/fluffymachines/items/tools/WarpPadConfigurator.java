@@ -86,9 +86,9 @@ public class WarpPadConfigurator extends SlimefunItem implements HologramOwner, 
 
                         updateHologram(b, "&a&l终点");
                         BlockStorage.addBlockInfo(b, "type", "destination");
-                        Utils.send(p, "&3此传送器已标记为&a终点&3并绑定到传送器");
+                        Utils.send(p, "&3此传送装置已标记为&a终点&3并绑定到传送装置");
 
-                    // Origin
+                        // Origin
                     } else if (pdc.has(world, PersistentDataType.STRING) && b.getWorld().getName().equals(
                         pdc.get(world, PersistentDataType.STRING))) {
                         int x = pdc.getOrDefault(xCoord, PersistentDataType.INTEGER, 0);
@@ -98,7 +98,7 @@ public class WarpPadConfigurator extends SlimefunItem implements HologramOwner, 
                         if (Math.abs(x - b.getX()) > MAX_DISTANCE.getValue()
                             || Math.abs(z - b.getZ()) > MAX_DISTANCE.getValue()) {
 
-                            Utils.send(p, "&c连接方块不能超过"
+                            Utils.send(p, "&c传送装置之间的距离不能超过"
                                 + MAX_DISTANCE.getValue() + "个方块!");
 
                             return;
@@ -106,19 +106,19 @@ public class WarpPadConfigurator extends SlimefunItem implements HologramOwner, 
 
                         registerOrigin(b, x, y, z);
 
-                        Utils.send(p, "&3此传送器已标记为&a起点&3并绑定到传送器" +
+                        Utils.send(p, "&3此传送装置已标记为&a起点&3并绑定到传送装置" +
                             "");
 
                     } else {
 
-                        Utils.send(p, "&c蹲下右键传送器设置终点,然后点击另一个" +
-                            " " + "传送器来设置起点!");
+                        Utils.send(p, "&c蹲下右键传送装置设置终点,然后点击另一个" +
+                            " " + "传送装置来设置起点!");
                     }
 
                 }
 
             } else {
-                Utils.send(p, "&c使用传送器配置器来配置传送器");
+                Utils.send(p, "&c使用传送装置配置器来配置传送装置");
             }
         }
     }

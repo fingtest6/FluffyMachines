@@ -69,7 +69,7 @@ public class AutoTableSaw extends SlimefunItem implements EnergyNetComponent {
             tableSawRecipes.put(new ItemStack(plank), new ItemStack(Material.STICK, 4));
         }
 
-        new BlockMenuPreset(getId(), "&6全自动切石机") {
+        new BlockMenuPreset(getId(), "&6全自动台锯") {
 
             @Override
             public void init() {
@@ -81,8 +81,8 @@ public class AutoTableSaw extends SlimefunItem implements EnergyNetComponent {
                 if (!BlockStorage.hasBlockInfo(b)
                     || BlockStorage.getLocationInfo(b.getLocation(), "enabled") == null
                     || BlockStorage.getLocationInfo(b.getLocation(), "enabled").equals(String.valueOf(false))) {
-                    menu.replaceExistingItem(6, new CustomItemStack(Material.GUNPOWDER, "&7Enabled: &4\u2718",
-                        "", "&e> 点击以开启")
+                    menu.replaceExistingItem(6, new CustomItemStack(Material.GUNPOWDER, "&7启用: &4\u2718",
+                        "", "&e> 点击开启")
                     );
                     menu.addMenuClickHandler(6, (p, slot, item, action) -> {
                         BlockStorage.addBlockInfo(b, "enabled", String.valueOf(true));
@@ -90,8 +90,8 @@ public class AutoTableSaw extends SlimefunItem implements EnergyNetComponent {
                         return false;
                     });
                 } else {
-                    menu.replaceExistingItem(6, new CustomItemStack(Material.REDSTONE, "&7Enabled: &2\u2714",
-                        "", "&e> 点击以关闭"));
+                    menu.replaceExistingItem(6, new CustomItemStack(Material.REDSTONE, "&7启用: &2\u2714",
+                        "", "&e> 点击关闭"));
                     menu.addMenuClickHandler(6, (p, slot, item, action) -> {
                         BlockStorage.addBlockInfo(b, "enabled", String.valueOf(false));
                         newInstance(menu, b);
@@ -164,7 +164,7 @@ public class AutoTableSaw extends SlimefunItem implements EnergyNetComponent {
         borders(preset, border, inputBorder, outputBorder);
         preset.addItem(2, new CustomItemStack(new ItemStack(Material.STONECUTTER), "&e使用方法", "",
                 "&b把将要制作的物品配方放入里面",
-                "&4只能合成切石机的物品"
+                "&4仅支持台钜的配方"
             ),
             ChestMenuUtils.getEmptyClickHandler());
     }
@@ -223,9 +223,11 @@ public class AutoTableSaw extends SlimefunItem implements EnergyNetComponent {
 
     /**
      * Method that finds planks associated with a log
+     *
      * @author TheBusyBiscuit
      */
-    private @Nonnull Optional<Material> getPlanks(@Nonnull Material log) {
+    private @Nonnull
+    Optional<Material> getPlanks(@Nonnull Material log) {
         String materialName = log.name().replace("STRIPPED_", "");
         materialName = materialName.substring(0, materialName.lastIndexOf('_')) + "_PLANKS";
         return Optional.ofNullable(Material.getMaterial(materialName));

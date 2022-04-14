@@ -10,6 +10,7 @@ import io.ncbpfluffybear.fluffymachines.utils.Events;
 import io.ncbpfluffybear.fluffymachines.utils.GlowEnchant;
 import io.ncbpfluffybear.fluffymachines.utils.McMMOEvents;
 import io.ncbpfluffybear.fluffymachines.utils.Utils;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,8 +20,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import javax.annotation.Nonnull;
+
 import lombok.SneakyThrows;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
+import net.guizhanss.guizhanlib.updater.GuizhanBuildsUpdater;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -41,7 +44,7 @@ public class FluffyMachines extends JavaPlugin implements SlimefunAddon {
     private static FluffyMachines instance;
     public static final HashMap<ItemStack, List<Pair<ItemStack, List<RecipeChoice>>>> shapedVanillaRecipes = new HashMap<>();
     public static final HashMap<ItemStack, List<Pair<ItemStack, List<RecipeChoice>>>> shapelessVanillaRecipes =
-            new HashMap<>();
+        new HashMap<>();
 
     @SneakyThrows
     @Override
@@ -50,12 +53,11 @@ public class FluffyMachines extends JavaPlugin implements SlimefunAddon {
         // Read something from your config.yml
         Config cfg = new Config(this);
 
-        if (cfg.getBoolean("options.auto-update") && getDescription().getVersion().startsWith("DEV - ")) {
-            new GitHubBuildsUpdater(this, getFile(), "NCBPFluffyBear/FluffyMachines/master/").start();
+        if (cfg.getBoolean("options.auto-update") && getDescription().getVersion().startsWith("Build ")) {
+            new GuizhanBuildsUpdater(this, getFile(), "baoad", "FluffyMachines", "master", false).start();
         }
 
         // Register Glow
-
         try {
             if (!Enchantment.isAcceptingRegistrations()) {
                 Field accepting = Enchantment.class.getDeclaredField("acceptingNew");
@@ -63,7 +65,7 @@ public class FluffyMachines extends JavaPlugin implements SlimefunAddon {
                 accepting.set(null, true);
             }
         } catch (IllegalAccessException | NoSuchFieldException ignored) {
-            getLogger().warning("Failed to register enchantment.");
+            getLogger().warning("无法注册发光附魔");
         }
 
         registerGlow();
@@ -87,7 +89,7 @@ public class FluffyMachines extends JavaPlugin implements SlimefunAddon {
 
                 if (!shapedVanillaRecipes.containsKey(key)) {
                     shapedVanillaRecipes.put(key,
-                            new ArrayList<>(Collections.singletonList(new Pair<>(sr.getResult(), rc))));
+                        new ArrayList<>(Collections.singletonList(new Pair<>(sr.getResult(), rc))));
                 } else {
                     shapedVanillaRecipes.get(key).add(new Pair<>(sr.getResult(), rc));
                 }
@@ -99,7 +101,7 @@ public class FluffyMachines extends JavaPlugin implements SlimefunAddon {
                 // Key has a list of recipe options
                 if (!shapelessVanillaRecipes.containsKey(key)) {
                     shapelessVanillaRecipes.put(key,
-                            new ArrayList<>(Collections.singletonList(new Pair<>(slr.getResult(), slr.getChoiceList()))));
+                        new ArrayList<>(Collections.singletonList(new Pair<>(slr.getResult(), slr.getChoiceList()))));
                 } else {
                     shapelessVanillaRecipes.get(key).add(new Pair<>(slr.getResult(), slr.getChoiceList()));
                 }
@@ -108,7 +110,7 @@ public class FluffyMachines extends JavaPlugin implements SlimefunAddon {
 
         // Register McMMO Events
         if (getServer().getPluginManager().isPluginEnabled("McMMO")) {
-            Bukkit.getLogger().log(Level.INFO, "McMMO 已对接!");
+            Bukkit.getLogger().log(Level.INFO, "McMMO 已接入!");
             getServer().getPluginManager().registerEvents(new McMMOEvents(), this);
         }
 
@@ -122,9 +124,9 @@ public class FluffyMachines extends JavaPlugin implements SlimefunAddon {
         final Metrics metrics = new Metrics(this, 8927);
 
         getLogger().log(Level.INFO, ChatColor.GREEN + "你好！要共享服务器到" +
-                "Slimefun社区吗?");
+            "Slimefun社区吗?");
         getLogger().log(Level.INFO, ChatColor.GREEN + "加入官方Slimefun服务器" +
-                "https://discord.gg/slimefun");
+            "https://discord.gg/slimefun");
     }
 
     @Override
@@ -170,7 +172,7 @@ public class FluffyMachines extends JavaPlugin implements SlimefunAddon {
                     } else {
                         RayTraceResult rayResult = p.rayTraceBlocks(5d);
                         if (rayResult != null && rayResult.getHitBlock() != null
-                                && BlockStorage.hasBlockInfo(rayResult.getHitBlock())) {
+                            && BlockStorage.hasBlockInfo(rayResult.getHitBlock())) {
 
                             BlockStorage.addBlockInfo(rayResult.getHitBlock(), args[1], args[2]);
                             Utils.send(p, "&a信息已应用.");
@@ -203,14 +205,14 @@ public class FluffyMachines extends JavaPlugin implements SlimefunAddon {
         }
 
         if (players > 0) {
-            Bukkit.getLogger().log(Level.INFO, "Auto-saved all player data for {0} player(s)!", players);
+            Bukkit.getLogger().log(Level.INFO, "已自动保存 {0} 位玩家的数据!", players);
         }
     }
 
     private void registerGlow() {
-        Enchantment glowEnchantment = new GlowEnchant(Constants.GLOW_ENCHANT, new String[]{
-                "SMALL_PORTABLE_CHARGER", "MEDIUM_PORTABLE_CHARGER", "BIG_PORTABLE_CHARGER",
-                "LARGE_PORTABLE_CHARGER", "CARBONADO_PORTABLE_CHARGER", "PAXEL"
+        Enchantment glowEnchantment = new GlowEnchant(Constants.GLOW_ENCHANT, new String[] {
+            "SMALL_PORTABLE_CHARGER", "MEDIUM_PORTABLE_CHARGER", "BIG_PORTABLE_CHARGER",
+            "LARGE_PORTABLE_CHARGER", "CARBONADO_PORTABLE_CHARGER", "PAXEL"
         });
 
         // Prevent double-registration errors
@@ -221,7 +223,7 @@ public class FluffyMachines extends JavaPlugin implements SlimefunAddon {
 
     @Override
     public String getBugTrackerURL() {
-        return "https://github.com/NCBPFluffyBear/FluffyMachines/issues";
+        return "https://github.com/SlimefunGuguProject/FluffyMachines/issues";
     }
 
     @Nonnull

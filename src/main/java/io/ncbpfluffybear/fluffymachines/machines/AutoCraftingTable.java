@@ -70,8 +70,8 @@ public class AutoCraftingTable extends SlimefunItem implements EnergyNetComponen
                 if (!BlockStorage.hasBlockInfo(b)
                     || BlockStorage.getLocationInfo(b.getLocation(), "enabled") == null
                     || BlockStorage.getLocationInfo(b.getLocation(), "enabled").equals(String.valueOf(false))) {
-                    menu.replaceExistingItem(4, new CustomItemStack(Material.GUNPOWDER, "&7Enabled: &4\u2718",
-                        "", "&e> 点击以启用")
+                    menu.replaceExistingItem(4, new CustomItemStack(Material.GUNPOWDER, "&7启用: &4\u2718",
+                        "", "&e> 点击启用")
                     );
                     menu.replaceExistingItem(statusSlot,
                         new CustomItemStack(new ItemStack(Material.GRAY_STAINED_GLASS_PANE),
@@ -82,8 +82,8 @@ public class AutoCraftingTable extends SlimefunItem implements EnergyNetComponen
                         return false;
                     });
                 } else {
-                    menu.replaceExistingItem(4, new CustomItemStack(Material.REDSTONE, "&7Enabled: &2\u2714",
-                        "", "&e> 点击以禁用"));
+                    menu.replaceExistingItem(4, new CustomItemStack(Material.REDSTONE, "&7启用: &2\u2714",
+                        "", "&e> 点击禁用"));
                     menu.addMenuClickHandler(4, (p, slot, item, action) -> {
                         BlockStorage.addBlockInfo(b, "enabled", String.valueOf(false));
                         newInstance(menu, b);
@@ -200,8 +200,8 @@ public class AutoCraftingTable extends SlimefunItem implements EnergyNetComponen
         }
 
         preset.addItem(2, new CustomItemStack(new ItemStack(Material.CRAFTING_TABLE), "&e使用方法", "",
-                "&b放入物品,而不是物品的配方", "&e再放入所要制作物品的配方",
-                "&4只能合成原版工作台合成的物品"
+                "&b在右侧放入需要合成的物品", "&e然后在下方放入配方",
+                "&4仅支持原版工作台配方"
             ),
             (p, slot, item, action) -> false);
     }
@@ -285,7 +285,7 @@ public class AutoCraftingTable extends SlimefunItem implements EnergyNetComponen
         if (keyItem == null) {
             if (menu.hasViewer()) {
                 menu.replaceExistingItem(statusSlot, new CustomItemStack(new ItemStack(Material.RED_STAINED_GLASS_PANE),
-                    "&c&l缺少配方(放入物品,而不是物品的配方)"));
+                    "&c&l请放入需要合成的物品"));
             }
             return;
         }
@@ -304,7 +304,7 @@ public class AutoCraftingTable extends SlimefunItem implements EnergyNetComponen
                     if (menu.hasViewer()) {
                         menu.replaceExistingItem(statusSlot,
                             new CustomItemStack(new ItemStack(Material.RED_STAINED_GLASS_PANE),
-                                "&c&l输入缺少物品"));
+                                "&c&l没有放入配方"));
                     }
                     return;
                 }
@@ -319,7 +319,7 @@ public class AutoCraftingTable extends SlimefunItem implements EnergyNetComponen
                 if (menu.hasViewer()) {
                     menu.replaceExistingItem(statusSlot,
                         new CustomItemStack(new ItemStack(Material.RED_STAINED_GLASS_PANE),
-                            "&c&l你需要放入更多物品", "&c&l来制造更多物品"));
+                            "&c&l你需要放入更多物品", "&c&l来进行合成"));
                 }
                 return;
             }
@@ -383,7 +383,7 @@ public class AutoCraftingTable extends SlimefunItem implements EnergyNetComponen
                     if (menu.hasViewer()) {
                         menu.replaceExistingItem(statusSlot,
                             new CustomItemStack(new ItemStack(Material.RED_STAINED_GLASS_PANE),
-                            "&c&l错误配方"));
+                                "&c&l错误配方"));
                     }
                 }
 
@@ -402,7 +402,7 @@ public class AutoCraftingTable extends SlimefunItem implements EnergyNetComponen
                     if (menu.hasViewer()) {
                         menu.replaceExistingItem(statusSlot,
                             new CustomItemStack(new ItemStack(Material.GREEN_STAINED_GLASS_PANE),
-                                "&a&l制造中"));
+                                "&a&l合成中"));
                     }
                     craft(menu, recipe.getFirstValue().clone());
                     return;
@@ -411,7 +411,7 @@ public class AutoCraftingTable extends SlimefunItem implements EnergyNetComponen
                     if (menu.hasViewer()) {
                         menu.replaceExistingItem(statusSlot,
                             new CustomItemStack(new ItemStack(Material.RED_STAINED_GLASS_PANE),
-                            "&c&l错误配方"));
+                                "&c&l错误配方"));
                     }
                 }
             }

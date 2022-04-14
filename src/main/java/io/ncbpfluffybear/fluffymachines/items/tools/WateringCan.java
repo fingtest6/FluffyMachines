@@ -45,7 +45,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class WateringCan extends SimpleSlimefunItem<ItemUseHandler> implements CancelPlace {
 
     public final ItemSetting<Integer> maxUses = new IntRangeSetting(this, "max-uses", 0, 10, Integer.MAX_VALUE);
-    public final ItemSetting<Double> sugarCaneSuccessChance = new DoubleRangeSetting(this, "sugar-cane-success-chance", 0, 0.3 ,1);
+    public final ItemSetting<Double> sugarCaneSuccessChance = new DoubleRangeSetting(this, "sugar-cane-success-chance", 0, 0.3, 1);
     public final ItemSetting<Double> cropSuccessChance = new DoubleRangeSetting(this, "crop-success-chance", 0, 0.3, 1);
     public final ItemSetting<Double> treeSuccessChance = new DoubleRangeSetting(this, "tree-success-chance", 0, 0.3, 1);
     public final ItemSetting<Double> exoticGardenSuccessChance = new DoubleRangeSetting(this, "exotic-garden-success-chance", 0, 0.3, 1);
@@ -200,7 +200,7 @@ public class WateringCan extends SimpleSlimefunItem<ItemUseHandler> implements C
         if (updateType == 1) {
 
             if (usesLeft == 0) {
-                Utils.send(p, "&c你需要给你的灌水罐加满水!");
+                Utils.send(p, "&c你需要给你的喷壶加满水!");
                 return false;
             }
             p.playSound(p.getLocation(), Sound.ENTITY_DROWNED_AMBIENT_WATER, 0.5F, 1F);
@@ -208,12 +208,12 @@ public class WateringCan extends SimpleSlimefunItem<ItemUseHandler> implements C
 
         } else if (updateType == 2) {
             p.playSound(p.getLocation(), Sound.ENTITY_DROWNED_DEATH_WATER, 0.5F, 1F);
-            Utils.send(p, "&a你已经装满了你的浇水罐");
+            Utils.send(p, "&a你已经装满了你的喷壶");
             usesLeft = can.getUses().getValue();
 
         } else if (updateType == 3) {
             if (usesLeft == 0) {
-                Utils.send(p, "&c你需要给你的灌水罐加满水!");
+                Utils.send(p, "&c你需要给你的喷壶加满水!");
                 return false;
             }
             usesLeft = 0;
@@ -222,7 +222,7 @@ public class WateringCan extends SimpleSlimefunItem<ItemUseHandler> implements C
             p.sendMessage("Error");
         }
 
-        lore.set(USE_INDEX, ChatColors.color("&a水值: &e" + usesLeft));
+        lore.set(USE_INDEX, ChatColors.color("&a剩余水量: &e" + usesLeft));
         meta.setLore(lore);
         meta.getPersistentDataContainer().set(usageKey, PersistentDataType.INTEGER, usesLeft);
         item.setItemMeta(meta);

@@ -118,7 +118,7 @@ public class AlternateElevatorPlate extends SimpleSlimefunItem<BlockUseHandler> 
 
     @ParametersAreNonnullByDefault
     private void openFloorSelector(Block b, List<Block> floors, Player p) {
-        ChestMenu elevatorMenu = new ChestMenu("Elevator");
+        ChestMenu elevatorMenu = new ChestMenu("电梯");
         for (int i = 0; i < floors.size(); i++) {
 
             if (i > MAX_CHEST_INDEX) {

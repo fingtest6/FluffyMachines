@@ -10,10 +10,12 @@ import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.implementation.items.SimpleSlimefunItem;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.protection.Interaction;
 import io.ncbpfluffybear.fluffymachines.utils.Utils;
+
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -30,7 +32,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class Dolly extends SimpleSlimefunItem<ItemUseHandler> {
 
     private static final ItemStack LOCK_ITEM = Utils.buildNonInteractable(
-            Material.DIRT, "&4&l错误", "&c你要搬到哪里?"
+        Material.DIRT, "&4&l错误", "&c你要搬到哪里?"
     );
 
     public Dolly(ItemGroup category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
@@ -58,7 +60,7 @@ public class Dolly extends SimpleSlimefunItem<ItemUseHandler> {
             }
 
             if (b.getType() == Material.CHEST && Slimefun.getProtectionManager().hasPermission(
-                    e.getPlayer(), b.getLocation(), Interaction.BREAK_BLOCK)
+                e.getPlayer(), b.getLocation(), Interaction.BREAK_BLOCK)
             ) {
 
                 // Create dolly if not already one
@@ -69,7 +71,7 @@ public class Dolly extends SimpleSlimefunItem<ItemUseHandler> {
 
 
             } else if (Slimefun.getProtectionManager().hasPermission(
-                    e.getPlayer(), b.getLocation(), Interaction.PLACE_BLOCK)
+                e.getPlayer(), b.getLocation(), Interaction.PLACE_BLOCK)
             ) {
 
                 // Place new chest
@@ -107,7 +109,7 @@ public class Dolly extends SimpleSlimefunItem<ItemUseHandler> {
             // Dolly full/empty status determined by lock item in first slot
             // Make sure the dolly is empty
             if (!isLockItem(backpack.getInventory().getItem(0))) {
-                Utils.send(p, "&cThis dolly is already carrying a chest!");
+                Utils.send(p, "&c该箱子搬运车已经搬运了一个箱子的!");
                 return;
             }
 
@@ -150,7 +152,7 @@ public class Dolly extends SimpleSlimefunItem<ItemUseHandler> {
 
             chest.setType(Material.AIR);
 
-            Utils.send(p, "&a你拾起了箱子");
+            Utils.send(p, "&a你拿起了箱子");
         }
     }
 
@@ -170,13 +172,13 @@ public class Dolly extends SimpleSlimefunItem<ItemUseHandler> {
             ItemStack[] bpContents = backpack.getInventory().getContents();
 
             if (isLockItem(bpContents[0])) {
-                Utils.send(p, "&cYou must pick up a chest first!");
+                Utils.send(p, "&c你必须拿起一个箱子!");
                 return;
             }
 
             boolean singleChest = isLockItem(bpContents[27]);
             if (!canChestFit(chestBlock, p, singleChest)) {
-                Utils.send(p, "&cYou can't fit your chest there!");
+                Utils.send(p, "&c该箱子无法放置于此处!");
                 return;
             }
 
@@ -192,7 +194,7 @@ public class Dolly extends SimpleSlimefunItem<ItemUseHandler> {
 
             ((InventoryHolder) chestBlock.getState()).getInventory().setStorageContents(bpContents);
             dolly.setType(Material.MINECART);
-            Utils.send(p, "&aChest has been placed");
+            Utils.send(p, "&a已放置箱子");
         });
     }
 
@@ -266,8 +268,8 @@ public class Dolly extends SimpleSlimefunItem<ItemUseHandler> {
 
     private boolean isLockItem(@Nullable ItemStack lockItem) {
         return lockItem != null && (Utils.checkNonInteractable(lockItem)
-                || lockItem.getItemMeta().hasCustomModelData() // Remnants of when I didn't know what PDC was
-                && lockItem.getItemMeta().getCustomModelData() == 6969); // Leave in to maintain compatibility
+            || lockItem.getItemMeta().hasCustomModelData() // Remnants of when I didn't know what PDC was
+            && lockItem.getItemMeta().getCustomModelData() == 6969); // Leave in to maintain compatibility
     }
 
 

@@ -7,14 +7,17 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.common.ChatColors;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.protection.Interaction;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import io.ncbpfluffybear.fluffymachines.FluffyMachines;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
+import net.guizhanss.guizhanlib.minecraft.helper.inventory.ItemStackHelper;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -134,11 +137,7 @@ public final class Utils {
     }
 
     public static String getViewableName(ItemStack item) {
-        if (item.getItemMeta().hasDisplayName()) {
-            return item.getItemMeta().getDisplayName();
-        } else {
-            return WordUtils.capitalizeFully(item.getType().name().replace("_", " "));
-        }
+        return ItemStackHelper.getDisplayName(item);
     }
 
     public static String toRoman(int number) {
@@ -167,19 +166,19 @@ public final class Utils {
 
     public static boolean canOpen(@Nonnull Block b, @Nonnull Player p) {
         return (p.hasPermission("slimefun.inventory.bypass")
-                || Slimefun.getProtectionManager().hasPermission(
-                p, b.getLocation(), Interaction.INTERACT_BLOCK));
+            || Slimefun.getProtectionManager().hasPermission(
+            p, b.getLocation(), Interaction.INTERACT_BLOCK));
     }
 
     // Don't use Slimefun's runsync
     public static BukkitTask runSync(Runnable r) {
         return FluffyMachines.getInstance() != null && FluffyMachines.getInstance().isEnabled() ?
-                Bukkit.getScheduler().runTask(FluffyMachines.getInstance(), r) : null;
+            Bukkit.getScheduler().runTask(FluffyMachines.getInstance(), r) : null;
     }
 
     public static BukkitTask runSync(Runnable r, long delay) {
         return FluffyMachines.getInstance() != null && FluffyMachines.getInstance().isEnabled() ?
-                Bukkit.getScheduler().runTaskLater(FluffyMachines.getInstance(), r, delay) : null;
+            Bukkit.getScheduler().runTaskLater(FluffyMachines.getInstance(), r, delay) : null;
     }
 }
 

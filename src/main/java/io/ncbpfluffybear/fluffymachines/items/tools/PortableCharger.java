@@ -71,11 +71,11 @@ public class PortableCharger extends SimpleSlimefunItem<ItemUseHandler> implemen
             final Rechargeable charger = (Rechargeable) SlimefunItem.getByItem(chargerItem);
 
             // Create GUI Items
-            Inventory inventory = Bukkit.createInventory(null, INV_SIZE, ChatColor.GOLD + "Portable Charger");
+            Inventory inventory = Bukkit.createInventory(null, INV_SIZE, ChatColor.GOLD + "便携充电器");
 
             ItemStack backgroundItem = Utils.buildNonInteractable(Material.GRAY_STAINED_GLASS_PANE, null);
             ItemStack borderItem = Utils.buildNonInteractable(Material.YELLOW_STAINED_GLASS_PANE, null);
-            ItemStack powerItem = Utils.buildNonInteractable(Material.GLOWSTONE, "&4Power");
+            ItemStack powerItem = Utils.buildNonInteractable(Material.GLOWSTONE, "&4电力");
 
             // Build and open GUI
             for (int i = 0; i < INV_SIZE; i++)
@@ -99,7 +99,7 @@ public class PortableCharger extends SimpleSlimefunItem<ItemUseHandler> implemen
 
                     if (sfItem instanceof PortableCharger) {
                         p.closeInventory();
-                        Utils.send(p, "&c您不能为便携式充电器充电");
+                        Utils.send(p, "&c您不能为便携充电器充电");
                     }
 
                     if (sfItem instanceof Rechargeable) {
@@ -127,7 +127,7 @@ public class PortableCharger extends SimpleSlimefunItem<ItemUseHandler> implemen
                             Utils.send(p, "&c便携充电器电量已经满了!");
 
                         } else {
-                            Utils.send(p, "&c你的便携充电器没有电量了!");
+                            Utils.send(p, "&c你的便携充电器没电了!");
                         }
 
                         // The name of the powerItem NEEDS to be "Portable Charger" to cancel event
@@ -157,7 +157,7 @@ public class PortableCharger extends SimpleSlimefunItem<ItemUseHandler> implemen
         SlimefunItem sfItem1 = SlimefunItem.getByItem(e.getCurrentItem());
         SlimefunItem sfItem2 = SlimefunItem.getByItem(e.getCursor());
         if ((sfItem1 instanceof PortableCharger || sfItem2 instanceof PortableCharger)
-            && e.getWhoClicked().getOpenInventory().getTitle().contains("Portable Charger")) {
+            && e.getWhoClicked().getOpenInventory().getTitle().contains("便携充电器")) {
             e.setCancelled(true);
         }
     }

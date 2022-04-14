@@ -91,8 +91,8 @@ public class AutoAncientAltar extends SlimefunItem implements EnergyNetComponent
                 if (!BlockStorage.hasBlockInfo(b)
                     || BlockStorage.getLocationInfo(b.getLocation(), "enabled") == null
                     || BlockStorage.getLocationInfo(b.getLocation(), "enabled").equals(String.valueOf(false))) {
-                    menu.replaceExistingItem(6, new CustomItemStack(Material.GUNPOWDER, "&7Enabled: &4\u2718", "",
-                        "&e> 单击以启用")
+                    menu.replaceExistingItem(6, new CustomItemStack(Material.GUNPOWDER, "&7启用: &4\u2718", "",
+                        "&e> 点击启用")
                     );
                     menu.addMenuClickHandler(6, (p, slot, item, action) -> {
                         BlockStorage.addBlockInfo(b, "enabled", String.valueOf(true));
@@ -100,8 +100,8 @@ public class AutoAncientAltar extends SlimefunItem implements EnergyNetComponent
                         return false;
                     });
                 } else {
-                    menu.replaceExistingItem(6, new CustomItemStack(Material.REDSTONE, "&7Enabled: &2\u2714",
-                        "", "&e> 单击以禁用")
+                    menu.replaceExistingItem(6, new CustomItemStack(Material.REDSTONE, "&7启用: &2\u2714",
+                        "", "&e> 点击禁用")
                     );
                     menu.addMenuClickHandler(6, (p, slot, item, action) -> {
                         BlockStorage.addBlockInfo(b, "enabled", String.valueOf(false));
@@ -221,7 +221,7 @@ public class AutoAncientAltar extends SlimefunItem implements EnergyNetComponent
         }
 
         preset.addItem(2, new CustomItemStack(new ItemStack(Material.ENCHANTING_TABLE), "&e使用方法",
-                "", "&b把将要制作的物品配方放入里面", "&4只能合成远古祭坛的物品"
+                "", "&b把将要制作的物品配方放入里面", "&4仅支持远古祭坛的配方"
             ),
             (p, slot, item, action) -> false);
     }
@@ -338,8 +338,8 @@ public class AutoAncientAltar extends SlimefunItem implements EnergyNetComponent
 
             try {
                 EntityType entityType = EntityType.valueOf(sfCatalyst.getId()
-                        .replace("FILLED_", "")
-                        .replace("_SOUL_JAR", "")
+                    .replace("FILLED_", "")
+                    .replace("_SOUL_JAR", "")
                 );
 
                 if (entityType == EntityType.UNKNOWN) {
@@ -356,7 +356,8 @@ public class AutoAncientAltar extends SlimefunItem implements EnergyNetComponent
                     }
                     menu.pushItem(spawnerItem.clone(), getOutputSlots());
                 }
-            } catch (IllegalArgumentException ignored) {}
+            } catch (IllegalArgumentException ignored) {
+            }
 
         } else if (SlimefunUtils.isItemSimilar(catalystItem, SlimefunItems.BROKEN_SPAWNER, false, false)) {
 

@@ -75,7 +75,7 @@ public class ElectricDustFabricator extends AContainer implements RecipeDisplayI
 
                     ItemStack dust = oreWasher.getRandomDust();
                     MachineRecipe recipe = new MachineRecipe(4 / getSpeed(), new ItemStack[] {acceptableInput},
-                            new ItemStack[] {dust});
+                        new ItemStack[] {dust});
 
                     if (menu.fits(recipe.getOutput()[0], getOutputSlots())) {
                         menu.consumeItem(slot);

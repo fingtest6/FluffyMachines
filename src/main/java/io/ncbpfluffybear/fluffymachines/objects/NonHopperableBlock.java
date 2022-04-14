@@ -23,8 +23,8 @@ public class NonHopperableBlock extends SlimefunItem {
     @EventHandler
     public void onHopper(InventoryMoveItemEvent e) {
         if (e.getSource().getType() == InventoryType.HOPPER && e.getDestination().getLocation() != null
-                && BlockStorage.hasBlockInfo(e.getDestination().getLocation())
-                && BlockStorage.check(e.getDestination().getLocation()) instanceof NonHopperableBlock
+            && BlockStorage.hasBlockInfo(e.getDestination().getLocation())
+            && BlockStorage.check(e.getDestination().getLocation()) instanceof NonHopperableBlock
         ) {
             e.setCancelled(true);
         }

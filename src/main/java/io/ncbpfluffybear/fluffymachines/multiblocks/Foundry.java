@@ -6,7 +6,9 @@ import io.ncbpfluffybear.fluffymachines.multiblocks.components.SuperheatedFurnac
 import io.ncbpfluffybear.fluffymachines.utils.FluffyItems;
 import io.ncbpfluffybear.fluffymachines.utils.Utils;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
+
 import java.util.Objects;
+
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
@@ -51,14 +53,14 @@ public class Foundry extends MultiBlockMachine {
                 ArmorStand lavaStand = (ArmorStand) p.getWorld().spawnEntity(b.getLocation().add(0.5, -3, 0.5),
                     EntityType.ARMOR_STAND);
                 lavaStand.getEquipment().setHelmet(new CustomItemStack(
-                        SlimefunUtils.getCustomHead("b6965e6a58684c277d18717cec959f2833a72dfa95661019dbcdf3dbf66b048")));
+                    SlimefunUtils.getCustomHead("b6965e6a58684c277d18717cec959f2833a72dfa95661019dbcdf3dbf66b048")));
                 lavaStand.setCanPickupItems(false);
                 lavaStand.setGravity(false);
                 lavaStand.setVisible(false);
                 lavaStand.setCustomName("hehexdfluff");
                 lavaStand.setCustomNameVisible(false);
                 Furnace furnace = (Furnace) b.getState();
-                furnace.setBurnTime((short)1000000);
+                furnace.setBurnTime((short) 1000000);
                 furnace.update(true);
 
                 BlockStorage.addBlockInfo(b, "stand", String.valueOf(lavaStand.getUniqueId()));
@@ -69,8 +71,8 @@ public class Foundry extends MultiBlockMachine {
         } else if (BlockStorage.getLocationInfo(b.getLocation(), "ignited") != null) {
             // Reheat furnace (Cosmetic)
             Furnace furnace = (Furnace) b.getState();
-            furnace.setBurnTime((short)1000000);
+            furnace.setBurnTime((short) 1000000);
             furnace.update(true);
         }
-     }
+    }
 }
