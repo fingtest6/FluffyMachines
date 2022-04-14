@@ -43,8 +43,7 @@ public class Foundry extends MultiBlockMachine {
 
         if (BlockStorage.getLocationInfo(b.getLocation(), "accessible") == null) {
             BlockStorage.addBlockInfo(b, "accessible", "true");
-            //p.closeInventory();
-            Utils.send(p, "&e铸造厂已成功造成,右击放入熔岩加热炉.");
+            Utils.send(p, "&e铸造厂已注册，接下来请手持岩浆桶并右键点击超热炉以加热.");
         } else if (BlockStorage.getLocationInfo(b.getLocation(), "ignited") == null) {
             if (p.getInventory().getItemInMainHand().getType() == Material.LAVA_BUCKET) {
 
@@ -65,9 +64,10 @@ public class Foundry extends MultiBlockMachine {
                 BlockStorage.addBlockInfo(b, "stand", String.valueOf(lavaStand.getUniqueId()));
                 BlockStorage.addBlockInfo(b, "ignited", "true");
             } else {
-                Utils.send(p, "&c这个炉子还需要放置岩浆!");
+                Utils.send(p, "&c这个铸造厂需要岩浆进行激活!");
             }
         } else if (BlockStorage.getLocationInfo(b.getLocation(), "ignited") != null) {
+            // Reheat furnace (Cosmetic)
             Furnace furnace = (Furnace) b.getState();
             furnace.setBurnTime((short)1000000);
             furnace.update(true);

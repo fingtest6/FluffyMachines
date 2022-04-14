@@ -7,12 +7,19 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.config.Config;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.updater.GitHubBuildsUpdater;
 import io.ncbpfluffybear.fluffymachines.utils.Constants;
 import io.ncbpfluffybear.fluffymachines.utils.Events;
-import io.ncbpfluffybear.fluffymachines.utils.FluffyItems;
 import io.ncbpfluffybear.fluffymachines.utils.GlowEnchant;
 import io.ncbpfluffybear.fluffymachines.utils.McMMOEvents;
 import io.ncbpfluffybear.fluffymachines.utils.Utils;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import javax.annotation.Nonnull;
 import lombok.SneakyThrows;
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -29,23 +36,12 @@ import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.RayTraceResult;
 
-import javax.annotation.Nonnull;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.regex.Matcher;
-
 public class FluffyMachines extends JavaPlugin implements SlimefunAddon {
 
     private static FluffyMachines instance;
     public static final HashMap<ItemStack, List<Pair<ItemStack, List<RecipeChoice>>>> shapedVanillaRecipes = new HashMap<>();
     public static final HashMap<ItemStack, List<Pair<ItemStack, List<RecipeChoice>>>> shapelessVanillaRecipes =
-        new HashMap<>();
+            new HashMap<>();
 
     @SneakyThrows
     @Override
@@ -91,8 +87,8 @@ public class FluffyMachines extends JavaPlugin implements SlimefunAddon {
 
                 if (!shapedVanillaRecipes.containsKey(key)) {
                     shapedVanillaRecipes.put(key,
-                        new ArrayList<>(Collections.singletonList(new Pair<>(sr.getResult(), rc))));
-                }else {
+                            new ArrayList<>(Collections.singletonList(new Pair<>(sr.getResult(), rc))));
+                } else {
                     shapedVanillaRecipes.get(key).add(new Pair<>(sr.getResult(), rc));
                 }
 
@@ -103,7 +99,7 @@ public class FluffyMachines extends JavaPlugin implements SlimefunAddon {
                 // Key has a list of recipe options
                 if (!shapelessVanillaRecipes.containsKey(key)) {
                     shapelessVanillaRecipes.put(key,
-                        new ArrayList<>(Collections.singletonList(new Pair<>(slr.getResult(), slr.getChoiceList()))));
+                            new ArrayList<>(Collections.singletonList(new Pair<>(slr.getResult(), slr.getChoiceList()))));
                 } else {
                     shapelessVanillaRecipes.get(key).add(new Pair<>(slr.getResult(), slr.getChoiceList()));
                 }
@@ -112,35 +108,13 @@ public class FluffyMachines extends JavaPlugin implements SlimefunAddon {
 
         // Register McMMO Events
         if (getServer().getPluginManager().isPluginEnabled("McMMO")) {
-            Bukkit.getLogger().log(Level.INFO, "对McMMO建立成功!");
+            Bukkit.getLogger().log(Level.INFO, "McMMO 已对接!");
             getServer().getPluginManager().registerEvents(new McMMOEvents(), this);
-        }
-
-        // Get Slimefun Numerical Version
-        try {
-            Matcher matcher = Constants.VERSION_PATTERN.matcher(Constants.SLIMEFUN_VERSION);
-            if (matcher.find()) {
-                int parsedVersion = Integer.parseInt(matcher.group(2));
-                if (parsedVersion < 844) {
-                    getLogger().log(Level.INFO, ChatColor.YELLOW + "您运行的是DEV 844之前的Slimefun版本. " +
-                        "FluffyMachines要求您更新Slimefun版本，以便让储存箱子保持正常工作. " +
-                        "请更换210415后续版本，否则玩家可能会遇到蓬松机器的各种问题." +
-                        "如果您未更改，作者将不负责蓬松机器.");
-                } else {
-                    Constants.SLIMEFUN_UPDATED = true;
-                }
-            } else {
-                getLogger().log(Level.INFO, ChatColor.YELLOW + "您运行的是RC版本的Slimefun版本." +
-                    "FluffyMachines要求您更新Slimefun版本，以便让储存箱子保持正常工作." +
-                    "请更换210415后续版本，否则玩家可能会遇到蓬松机器的各种问题." +
-                    "如果您未更改，作者将不负责蓬松机器.");
-            }
-        } catch (NumberFormatException e) {
-            return;
         }
 
         // Registering Items
         FluffyItemSetup.setup(this);
+        FluffyItemSetup.setupBarrels(this);
 
         // Register Events Class
         getServer().getPluginManager().registerEvents(new Events(), this);
@@ -148,9 +122,9 @@ public class FluffyMachines extends JavaPlugin implements SlimefunAddon {
         final Metrics metrics = new Metrics(this, 8927);
 
         getLogger().log(Level.INFO, ChatColor.GREEN + "你好！要共享服务器到" +
-            "Slimefun社区吗?");
+                "Slimefun社区吗?");
         getLogger().log(Level.INFO, ChatColor.GREEN + "加入官方Slimefun服务器" +
-            "https://discord.gg/slimefun");
+                "https://discord.gg/slimefun");
     }
 
     @Override
@@ -159,61 +133,61 @@ public class FluffyMachines extends JavaPlugin implements SlimefunAddon {
     }
 
     @Override
-    public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command cmd, @Nonnull String label,
-                             String[] args) {
+    public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command cmd, @Nonnull String label, String[] args) {
 
         if (args.length == 0) {
-            sender.sendMessage("&eFluffyMachines > &c成功");
+            Utils.send(sender, "&c无效的指令");
             return true;
         }
-        if (args[0].equalsIgnoreCase("replace") && sender instanceof Player) {
-            Player p = ((Player) sender);
-            ItemStack item = p.getInventory().getItemInMainHand();
-            if (SlimefunItem.getByItem(item) != null) {
-                if (SlimefunItem.getByItem(item) == FluffyItems.WATERING_CAN.getItem()) {
-                    p.getInventory().setItemInMainHand(FluffyItems.WATERING_CAN.clone());
-                }
-            }
+
+        if (!(sender instanceof Player)) {
+            Utils.send(sender, "&c只有玩家才能执行该指令");
             return true;
-        } else if (args[0].equalsIgnoreCase("debug") && sender.hasPermission("fluffymachines.admin")) {
-
-            return true;
-        } else if (args[0].equalsIgnoreCase("save") && sender.hasPermission("fluffymachines.admin")) {
-            saveAllPlayers();
-            return true;
-
-        } else if (args[0].equalsIgnoreCase("meta") && sender instanceof Player) {
-            Player p = (Player) sender;
-            Utils.send(p, String.valueOf(p.getInventory().getItemInMainHand().getItemMeta()));
-            return true;
-
-        } else if (args[0].equalsIgnoreCase("rawmeta") && sender instanceof Player) {
-            Player p = (Player) sender;
-            p.sendMessage(String.valueOf(p.getInventory().getItemInMainHand().getItemMeta()).replace("§", "&"));
-            return true;
-
-        } else if (args[0].equalsIgnoreCase("addinfo") && sender.hasPermission("fluffymachines.admin")
-            && sender instanceof Player) {
-            Player p = (Player) sender;
-
-            if (args.length != 3) {
-                Utils.send(p, "&c请指定密钥和数据");
-
-            } else {
-                RayTraceResult rayResult = p.rayTraceBlocks(5d);
-                if (rayResult != null && rayResult.getHitBlock() != null
-                    && BlockStorage.hasBlockInfo(rayResult.getHitBlock())) {
-
-                    BlockStorage.addBlockInfo(rayResult.getHitBlock(), args[1], args[2]);
-                    Utils.send(p, "&a已添加.");
-
-                } else {
-                    Utils.send(p, "&c你必须瞄准一个SF物品");
-                }
-            }
-            return true;
-
         }
+
+        Player p = (Player) sender;
+
+        switch (args[0].toUpperCase()) {
+            case "META":
+                Utils.send(p, String.valueOf(p.getInventory().getItemInMainHand().getItemMeta()));
+                return true;
+            case "RAWMETA":
+                p.sendMessage(String.valueOf(p.getInventory().getItemInMainHand().getItemMeta()).replace("§", "&"));
+                return true;
+            case "VERSION":
+            case "V":
+                Utils.send(p, "&e当前版本:" + this.getPluginVersion());
+                return true;
+        }
+
+        if (p.hasPermission("fluffymachines.admin")) {
+            switch (args[0].toUpperCase()) {
+                case "ADDINFO":
+
+                    if (args.length != 3) {
+                        Utils.send(p, "&c请指定键名和值");
+
+                    } else {
+                        RayTraceResult rayResult = p.rayTraceBlocks(5d);
+                        if (rayResult != null && rayResult.getHitBlock() != null
+                                && BlockStorage.hasBlockInfo(rayResult.getHitBlock())) {
+
+                            BlockStorage.addBlockInfo(rayResult.getHitBlock(), args[1], args[2]);
+                            Utils.send(p, "&a信息已应用.");
+
+                        } else {
+                            Utils.send(p, "&c你必须看向一个Slimefun方块");
+                        }
+                    }
+                    return true;
+                case "SAVEPLAYERS":
+                    saveAllPlayers();
+                    return true;
+            }
+        }
+
+        Utils.send(p, "&c指令不存在");
+
         return false;
     }
 
@@ -234,9 +208,9 @@ public class FluffyMachines extends JavaPlugin implements SlimefunAddon {
     }
 
     private void registerGlow() {
-        Enchantment glowEnchantment = new GlowEnchant(Constants.GLOW_ENCHANT, new String[] {
-            "SMALL_PORTABLE_CHARGER", "MEDIUM_PORTABLE_CHARGER", "BIG_PORTABLE_CHARGER",
-            "LARGE_PORTABLE_CHARGER", "CARBONADO_PORTABLE_CHARGER", "PAXEL"
+        Enchantment glowEnchantment = new GlowEnchant(Constants.GLOW_ENCHANT, new String[]{
+                "SMALL_PORTABLE_CHARGER", "MEDIUM_PORTABLE_CHARGER", "BIG_PORTABLE_CHARGER",
+                "LARGE_PORTABLE_CHARGER", "CARBONADO_PORTABLE_CHARGER", "PAXEL"
         });
 
         // Prevent double-registration errors
