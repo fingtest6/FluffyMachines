@@ -18,6 +18,7 @@ import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
 import io.ncbpfluffybear.fluffymachines.FluffyMachines;
 import io.ncbpfluffybear.fluffymachines.utils.Utils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -26,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import javax.annotation.Nonnull;
+
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
@@ -52,30 +54,30 @@ import org.bukkit.inventory.meta.ItemMeta;
  */
 public class SmartFactory extends SlimefunItem implements EnergyNetComponent, Listener, RecipeDisplayItem {
 
-    private final int[] BORDER = new int[]{5, 6, 7, 8, 41, 42, 43, 44, 50, 51, 52, 53};
-    private final int[] BORDER_IN = new int[]{0, 1, 2, 3, 4, 9, 13, 18, 22, 27, 31, 36, 40, 45, 46, 47, 48, 49};
-    private final int[] BORDER_OUT = new int[]{14, 15, 16, 17, 23, 26, 32, 33, 34, 35};
-    private final int[] COAL_SLOTS = new int[]{10, 11, 12};
-    private final int[] MISC_SLOTS = new int[]{19, 20, 21, 28, 29, 30, 37, 38, 39};
-    private final int[] INPUT_SLOTS = new int[]{10, 11, 12, 19, 20, 21, 28, 29, 30, 37, 38, 39};
+    private final int[] BORDER = new int[] {5, 6, 7, 8, 41, 42, 43, 44, 50, 51, 52, 53};
+    private final int[] BORDER_IN = new int[] {0, 1, 2, 3, 4, 9, 13, 18, 22, 27, 31, 36, 40, 45, 46, 47, 48, 49};
+    private final int[] BORDER_OUT = new int[] {14, 15, 16, 17, 23, 26, 32, 33, 34, 35};
+    private final int[] COAL_SLOTS = new int[] {10, 11, 12};
+    private final int[] MISC_SLOTS = new int[] {19, 20, 21, 28, 29, 30, 37, 38, 39};
+    private final int[] INPUT_SLOTS = new int[] {10, 11, 12, 19, 20, 21, 28, 29, 30, 37, 38, 39};
     private final int PROGRESS_SLOT = 42;
     private final int RECIPE_SLOT = 43;
-    private static final ItemStack PROGRESS_ITEM = new CustomItemStack(Material.FLINT_AND_STEEL, "&aProgress");
+    private static final ItemStack PROGRESS_ITEM = new CustomItemStack(Material.FLINT_AND_STEEL, "&a制作中");
 
     private static final Map<BlockPosition, Integer> progress = new HashMap<>();
     private static final int PROCESS_TIME_TICKS = 10; // "Number of seconds", except 1 Slimefun "second" = 1.6 IRL seconds
 
     private final List<SlimefunItemStack> ACCEPTED_ITEMS = new ArrayList<>(Arrays.asList(
-            SlimefunItems.BILLON_INGOT, SlimefunItems.SOLDER_INGOT, SlimefunItems.NICKEL_INGOT,
-            SlimefunItems.COBALT_INGOT, SlimefunItems.DURALUMIN_INGOT, SlimefunItems.BRONZE_INGOT,
-            SlimefunItems.BRASS_INGOT, SlimefunItems.ALUMINUM_BRASS_INGOT, SlimefunItems.STEEL_INGOT,
-            SlimefunItems.DAMASCUS_STEEL_INGOT, SlimefunItems.ALUMINUM_BRONZE_INGOT,
-            SlimefunItems.CORINTHIAN_BRONZE_INGOT, SlimefunItems.GILDED_IRON, SlimefunItems.REDSTONE_ALLOY,
-            SlimefunItems.HARDENED_METAL_INGOT, SlimefunItems.REINFORCED_ALLOY_INGOT, SlimefunItems.FERROSILICON,
-            SlimefunItems.ELECTRO_MAGNET, SlimefunItems.ELECTRIC_MOTOR, SlimefunItems.HEATING_COIL,
-            SlimefunItems.SYNTHETIC_EMERALD, SlimefunItems.GOLD_4K, SlimefunItems.GOLD_6K, SlimefunItems.GOLD_8K,
-            SlimefunItems.GOLD_10K, SlimefunItems.GOLD_12K, SlimefunItems.GOLD_14K, SlimefunItems.GOLD_16K,
-            SlimefunItems.GOLD_18K, SlimefunItems.GOLD_20K, SlimefunItems.GOLD_22K, SlimefunItems.GOLD_24K
+        SlimefunItems.BILLON_INGOT, SlimefunItems.SOLDER_INGOT, SlimefunItems.NICKEL_INGOT,
+        SlimefunItems.COBALT_INGOT, SlimefunItems.DURALUMIN_INGOT, SlimefunItems.BRONZE_INGOT,
+        SlimefunItems.BRASS_INGOT, SlimefunItems.ALUMINUM_BRASS_INGOT, SlimefunItems.STEEL_INGOT,
+        SlimefunItems.DAMASCUS_STEEL_INGOT, SlimefunItems.ALUMINUM_BRONZE_INGOT,
+        SlimefunItems.CORINTHIAN_BRONZE_INGOT, SlimefunItems.GILDED_IRON, SlimefunItems.REDSTONE_ALLOY,
+        SlimefunItems.HARDENED_METAL_INGOT, SlimefunItems.REINFORCED_ALLOY_INGOT, SlimefunItems.FERROSILICON,
+        SlimefunItems.ELECTRO_MAGNET, SlimefunItems.ELECTRIC_MOTOR, SlimefunItems.HEATING_COIL,
+        SlimefunItems.SYNTHETIC_EMERALD, SlimefunItems.GOLD_4K, SlimefunItems.GOLD_6K, SlimefunItems.GOLD_8K,
+        SlimefunItems.GOLD_10K, SlimefunItems.GOLD_12K, SlimefunItems.GOLD_14K, SlimefunItems.GOLD_16K,
+        SlimefunItems.GOLD_18K, SlimefunItems.GOLD_20K, SlimefunItems.GOLD_22K, SlimefunItems.GOLD_24K
     ));
     private final Map<SlimefunItem, ItemStack[]> ITEM_RECIPES = new HashMap<>();
 
@@ -92,18 +94,18 @@ public class SmartFactory extends SlimefunItem implements EnergyNetComponent, Li
     }
 
     private void buildPreset() {
-        new BlockMenuPreset(this.getId(), "&cSmart Factory") {
+        new BlockMenuPreset(this.getId(), "&c智能工厂") {
             @Override
             public void init() {
                 ChestMenuUtils.drawBackground(this, BORDER);
                 Utils.createBorder(this, ChestMenuUtils.getInputSlotTexture(), BORDER_IN);
                 Utils.createBorder(this, ChestMenuUtils.getOutputSlotTexture(), BORDER_OUT);
                 this.addItem(PROGRESS_SLOT, PROGRESS_ITEM);
-                this.addItem(9, new CustomItemStack(Material.BLACK_STAINED_GLASS_PANE, "&7Coal Slots",
-                        "&eThis row is reserved for coal for cargo"
+                this.addItem(9, new CustomItemStack(Material.BLACK_STAINED_GLASS_PANE, "&7煤炭区",
+                    "&e该行的格子会接收来自货运的煤炭"
                 ));
-                this.addItem(18, new CustomItemStack(Material.YELLOW_STAINED_GLASS_PANE, "&bMisc Slots",
-                        "&eThe remaining rows accept any item", "&eCargo will only complete the stacks"
+                this.addItem(18, new CustomItemStack(Material.YELLOW_STAINED_GLASS_PANE, "&b矿粉区",
+                    "&e剩余的格子会接收来自货运的任何物品", "&e货运仅会补充现有的矿粉"
                 ));
             }
 
@@ -117,8 +119,8 @@ public class SmartFactory extends SlimefunItem implements EnergyNetComponent, Li
                 String recipe = BlockStorage.getLocationInfo(b.getLocation(), "recipe");
 
                 if (recipe == null) {
-                    menu.replaceExistingItem(RECIPE_SLOT, new CustomItemStack(Material.BARRIER, "&bRecipe",
-                            "&eSneak and right click the", "&cfactory with a supported resource", "&cto set the recipe"
+                    menu.replaceExistingItem(RECIPE_SLOT, new CustomItemStack(Material.BARRIER, "&b配方",
+                        "&e手持合金 Shift+右键点击", "&c智能工厂来设置配方"
                     ));
                 } else {
                     menu.replaceExistingItem(RECIPE_SLOT, getDisplayItem(SlimefunItem.getById(recipe)));
@@ -195,7 +197,7 @@ public class SmartFactory extends SlimefunItem implements EnergyNetComponent, Li
             if (block instanceof SmartFactory) {
                 SlimefunItem recipe = SlimefunItem.getByItem(e.getItem());
                 if (recipe == null || recipe.getItem() == SlimefunItems.CARGO_INPUT_NODE
-                        || recipe.getItem() == SlimefunItems.CARGO_OUTPUT_NODE || recipe.getItem() == SlimefunItems.CARGO_OUTPUT_NODE_2
+                    || recipe.getItem() == SlimefunItems.CARGO_OUTPUT_NODE || recipe.getItem() == SlimefunItems.CARGO_OUTPUT_NODE_2
                 ) {
                     return;
                 }
@@ -205,10 +207,10 @@ public class SmartFactory extends SlimefunItem implements EnergyNetComponent, Li
                 if (ACCEPTED_ITEMS.contains((SlimefunItemStack) recipe.getItem())) {
                     BlockStorage.addBlockInfo(e.getClickedBlock().get(), "recipe", recipe.getId());
                     BlockStorage.getInventory(e.getClickedBlock().get()).replaceExistingItem(RECIPE_SLOT,
-                            getDisplayItem(recipe));
-                    Utils.send(e.getPlayer(), "&aTarget recipe set to " + recipe.getItemName());
+                        getDisplayItem(recipe));
+                    Utils.send(e.getPlayer(), "&a已设置配方为 " + recipe.getItemName());
                 } else {
-                    Utils.send(e.getPlayer(), "&cThis item is not supported!");
+                    Utils.send(e.getPlayer(), "&c该物品暂不支持!");
                 }
             }
         }
@@ -253,7 +255,7 @@ public class SmartFactory extends SlimefunItem implements EnergyNetComponent, Li
             progress.put(pos, ++currentProgress);
 
             ChestMenuUtils.updateProgressbar(inv, PROGRESS_SLOT, PROCESS_TIME_TICKS - currentProgress,
-                    PROCESS_TIME_TICKS, PROGRESS_ITEM);
+                PROCESS_TIME_TICKS, PROGRESS_ITEM);
 
             removeCharge(b.getLocation(), getEnergyConsumption());
             return;
@@ -323,7 +325,7 @@ public class SmartFactory extends SlimefunItem implements EnergyNetComponent, Li
         // Reset progress
         progress.put(pos, 0);
         ChestMenuUtils.updateProgressbar(inv, PROGRESS_SLOT, PROCESS_TIME_TICKS,
-                PROCESS_TIME_TICKS, PROGRESS_ITEM);
+            PROCESS_TIME_TICKS, PROGRESS_ITEM);
     }
 
     private ItemStack[] collectRawRecipe(SlimefunItem key) {
@@ -409,8 +411,8 @@ public class SmartFactory extends SlimefunItem implements EnergyNetComponent, Li
 
         List<String> lore = displayMeta.getLore();
         lore.add("");
-        lore.add(Utils.color("&eSneak and Right Click the factory with a"));
-        lore.add(Utils.color("&ecompatible resource to change the recipe"));
+        lore.add(Utils.color("&e手持合金 Shift+右键点击"));
+        lore.add(Utils.color("&e智能工厂以设置配方"));
 
         displayMeta.setLore(lore);
         item.setItemMeta(displayMeta);
@@ -458,7 +460,7 @@ public class SmartFactory extends SlimefunItem implements EnergyNetComponent, Li
     }
 
     private int[] getOutputSlots() {
-        return new int[]{24, 25};
+        return new int[] {24, 25};
     }
 
     @Nonnull
