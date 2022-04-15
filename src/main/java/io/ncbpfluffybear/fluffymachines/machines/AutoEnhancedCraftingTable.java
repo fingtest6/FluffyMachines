@@ -8,7 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 public class AutoEnhancedCraftingTable extends AutoCrafter {
-    public AutoEnhancedCraftingTable(ItemGroup category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe, String displayName, Material material, String machineName, RecipeType machineRecipes) {
+    public AutoEnhancedCraftingTable(ItemGroup category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, recipeType, recipe, "&6全自动增强型工作台",
             Material.CRAFTING_TABLE, "&6增强型工作台", RecipeType.ENHANCED_CRAFTING_TABLE
         );

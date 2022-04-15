@@ -247,6 +247,15 @@ public class FluffyItems {
         "&7铸造厂部件",
         "&c请不要用爆炸工具打破!"
     );
+    public static final SlimefunItemStack AUTO_ENHANCED_CRAFTING_TABLE = new SlimefunItemStack("AUTO_ENHANCED_CRAFTING_TABLE",
+            Material.CRAFTING_TABLE,
+            "&eAuto Enhanced Crafting Table",
+            "",
+            "&7Automatically crafts &eEnhanced Crafting Table &7recipes",
+            "",
+            LoreBuilderDynamic.powerBuffer(AutoCrafter.CAPACITY),
+            LoreBuilderDynamic.powerPerTick(AutoCrafter.ENERGY_CONSUMPTION)
+    );
     public static final SlimefunItemStack AUTO_MAGIC_WORKBENCH = new SlimefunItemStack("AUTO_MAGIC_WORKBENCH",
         Material.BOOKSHELF,
         "&6自动魔法工作台",
