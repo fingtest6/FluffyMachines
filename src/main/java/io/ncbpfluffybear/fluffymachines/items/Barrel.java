@@ -30,6 +30,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
+import net.guizhanss.guizhanlib.minecraft.helper.inventory.ItemStackHelper;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -436,7 +437,7 @@ public class Barrel extends NonHopperableBlock implements DoubleHologramOwner {
     public void updateMenu(Block b, BlockMenu inv, boolean force) {
         String hasHolo = BlockStorage.getLocationInfo(b.getLocation(), "holo");
         int stored = getStored(b);
-        String itemName;
+        String itemName = "";
 
         String storedPercent = doubleRoundAndFade((double) stored / (double) barrelCapacity.getValue() * 100);
         String storedStacks =
@@ -449,10 +450,8 @@ public class Barrel extends NonHopperableBlock implements DoubleHologramOwner {
                 "&b" + storedStacks + "组 &8| &7" + storedPercent + "&7%"));
         }
 
-        if (inv.getItemInSlot(DISPLAY_SLOT) != null && inv.getItemInSlot(DISPLAY_SLOT).getItemMeta().hasDisplayName()) {
-            itemName = inv.getItemInSlot(DISPLAY_SLOT).getItemMeta().getDisplayName();
-        } else {
-            itemName = WordUtils.capitalizeFully(inv.getItemInSlot(DISPLAY_SLOT).getType().name().replace("_", " "));
+        if (inv.getItemInSlot(DISPLAY_SLOT) != null) {
+            itemName = ItemStackHelper.getDisplayName(inv.getItemInSlot(DISPLAY_SLOT));
         }
 
         if (showHologram.getValue() && (hasHolo == null || hasHolo.equals("true"))) {
