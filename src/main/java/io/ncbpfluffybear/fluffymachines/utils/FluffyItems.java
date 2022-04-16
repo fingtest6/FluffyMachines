@@ -36,14 +36,15 @@ public class FluffyItems {
     }
 
     // Barrels
-    public static final SlimefunItemStack MINI_FLUFFY_BARREL = new SlimefunItemStack("MINI_FLUFFY_BARREL",
-            Material.COMPOSTER,
-            "&eMini Fluffy Barrel",
-            "",
-            "&7Stores a large amount of an item",
-            "&7Has a changeable capacity",
-            "",
-            "&bMax Capacity: &e" + MiniBarrel.getDisplayCapacity() + " Items"
+    public static final SlimefunItemStack MINI_FLUFFY_BARREL = new SlimefunItemStack(
+        "MINI_FLUFFY_BARREL",
+        Material.COMPOSTER,
+        "&e迷你蓬松箱子",
+        "",
+        "&7可以储存大量物品",
+        "&7可以更改容量",
+        "",
+        "&b最大容量: &e" + MiniBarrel.getDisplayCapacity() + " 个物品"
     );
 
     // Portable Chargers
