@@ -282,9 +282,9 @@ public class FluffyItems {
     public static final SlimefunItemStack AUTO_ENHANCED_CRAFTING_TABLE = new SlimefunItemStack(
         "AUTO_ENHANCED_CRAFTING_TABLE",
         Material.CRAFTING_TABLE,
-        "&eAuto Enhanced Crafting Table",
+        "&e自动增强型工作台",
         "",
-        "&7Automatically crafts &eEnhanced Crafting Table &7recipes",
+        "&7全自动制造&e增强型工作台&7物品",
         "",
         LoreBuilderDynamic.powerBuffer(AutoCrafter.CAPACITY),
         LoreBuilderDynamic.powerPerSecond(AutoCrafter.ENERGY_CONSUMPTION)
