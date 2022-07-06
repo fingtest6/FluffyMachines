@@ -1,6 +1,7 @@
 package io.ncbpfluffybear.fluffymachines.items.tools;
 
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.ItemSetting;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerBackpack;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
@@ -35,8 +36,11 @@ public class Dolly extends SimpleSlimefunItem<ItemUseHandler> {
         Material.DIRT, "&4&l错误", "&c你要搬到哪里?"
     );
 
+    private ItemSetting<Boolean> canPickupLockedChest = new ItemSetting<>(this, "can-pick-locked-chest", true);
+
     public Dolly(ItemGroup category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, recipeType, recipe);
+        addItemSetting(canPickupLockedChest);
     }
 
     @Nonnull
@@ -59,9 +63,7 @@ public class Dolly extends SimpleSlimefunItem<ItemUseHandler> {
                 return;
             }
 
-            if (b.getType() == Material.CHEST && Slimefun.getProtectionManager().hasPermission(
-                e.getPlayer(), b.getLocation(), Interaction.BREAK_BLOCK)
-            ) {
+            if (canPickupChest(b, p)) {
 
                 // Create dolly if not already one
                 buildDolly(dolly, p);
@@ -79,6 +81,16 @@ public class Dolly extends SimpleSlimefunItem<ItemUseHandler> {
             }
 
         };
+    }
+
+    private boolean canPickupChest(Block b, Player p) {
+        if (b.getType() != Material.CHEST) {
+            return false;
+        }
+        if (!canPickupLockedChest.getValue() && ((org.bukkit.block.Chest) b.getState()).isLocked()) {
+            return false;
+        }
+        return Slimefun.getProtectionManager().hasPermission(p, b.getLocation(), Interaction.BREAK_BLOCK);
     }
 
     private void buildDolly(ItemStack dolly, Player p) {
@@ -109,7 +121,7 @@ public class Dolly extends SimpleSlimefunItem<ItemUseHandler> {
             // Dolly full/empty status determined by lock item in first slot
             // Make sure the dolly is empty
             if (!isLockItem(backpack.getInventory().getItem(0))) {
-                Utils.send(p, "&c该箱子搬运车已经搬运了一个箱子的!");
+                Utils.send(p, "&c该箱子搬运车已经拿起了一个箱子!");
                 return;
             }
 
