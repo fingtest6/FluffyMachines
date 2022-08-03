@@ -110,7 +110,7 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.TheBusyBiscuit</groupId>
+            <groupId>io.github.Slimefun</groupId>
             <artifactId>Slimefun4</artifactId>
             <version>RC-31</version>
             <scope>provided</scope>
@@ -166,7 +166,7 @@
         <dependency>
             <groupId>net.guizhanss</groupId>
             <artifactId>GuizhanLib</artifactId>
-            <version>91310a97f3</version>
+            <version>0.9.9</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
