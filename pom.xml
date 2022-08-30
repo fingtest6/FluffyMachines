@@ -36,7 +36,7 @@
     </repositories>
 
     <build>
-        <finalName>${project.name}-${project.version}</finalName>
+        <finalName>${project.name} v${project.version}</finalName>
         <defaultGoal>clean package</defaultGoal>
         <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
 
@@ -71,10 +71,6 @@
                         <relocation>
                             <pattern>com.github.Slimefun-Addon-Community.extrautils</pattern>
                             <shadedPattern>io.ncbpfluffybear.shaded.extrautils</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>net.guizhanss.guizhanlib</pattern>
-                            <shadedPattern>io.ncbpfluffybear.shaded.guizhanlib</shadedPattern>
                         </relocation>
                     </relocations>
 
@@ -112,7 +108,7 @@
         <dependency>
             <groupId>io.github.Slimefun</groupId>
             <artifactId>Slimefun4</artifactId>
-            <version>RC-31</version>
+            <version>RC-32</version>
             <scope>provided</scope>
         </dependency>
 
@@ -165,9 +161,9 @@
 
         <dependency>
             <groupId>net.guizhanss</groupId>
-            <artifactId>GuizhanLib</artifactId>
-            <version>0.9.9</version>
-            <scope>compile</scope>
+            <artifactId>GuizhanLibPlugin</artifactId>
+            <version>1.0.2</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
