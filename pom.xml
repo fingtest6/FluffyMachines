@@ -154,7 +154,7 @@
         </dependency>
 
         <dependency>
-            <groupId>net.guizhanss</groupId>
+            <groupId>com.github.slimefunguguproject</groupId>
             <artifactId>ExtraUtils</artifactId>
             <version>bf89aee6ae</version>
         </dependency>
