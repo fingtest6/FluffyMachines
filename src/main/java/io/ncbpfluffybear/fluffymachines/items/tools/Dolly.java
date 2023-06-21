@@ -1,5 +1,6 @@
 package io.ncbpfluffybear.fluffymachines.items.tools;
 
+import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemSetting;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
@@ -11,7 +12,6 @@ import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.implementation.items.SimpleSlimefunItem;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.protection.Interaction;
 import io.ncbpfluffybear.fluffymachines.utils.Utils;
-import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -73,7 +73,7 @@ public class Dolly extends SimpleSlimefunItem<ItemUseHandler> {
             Block b = e.getClickedBlock().get();
 
             // Block usage on Slimefun Blocks
-            if (BlockStorage.hasBlockInfo(b)) {
+            if (StorageCacheUtils.hasBlock(b.getLocation())) {
                 return;
             }
 
@@ -108,26 +108,21 @@ public class Dolly extends SimpleSlimefunItem<ItemUseHandler> {
     }
 
     private void buildDolly(ItemStack dolly, Player p) {
-        // Build backpack if new
-        ItemMeta dollyMeta = dolly.getItemMeta();
-        for (String line : dollyMeta.getLore()) {
-            if (line.contains("ID: <ID>")) {
-                PlayerProfile.get(p, profile -> {
-                    int backpackId = profile.createBackpack(54).getId();
-                    Slimefun.getBackpackListener().setBackpackId(p, dolly, 3, backpackId);
-                    PlayerProfile.getBackpack(dolly, backpack -> backpack.getInventory().setItem(0, LOCK_ITEM));
-                });
-            }
-        }
+        PlayerProfile.get(p, profile -> PlayerBackpack.bindItem(
+                dolly,
+                Slimefun.getDatabaseManager().getProfileDataController().createBackpack(
+                        p,
+                        "&b箱子搬运车",
+                        profile.nextBackpackNum(),
+                        54
+                )
+        ));
     }
 
     private void pickupChest(ItemStack dolly, Block chest, Player p) {
         Inventory chestInventory = ((InventoryHolder) chest.getState()).getInventory();
-        AtomicBoolean validOperation = new AtomicBoolean(false); // Used to deal with async block replacement
-        AtomicBoolean isDoubleChest = new AtomicBoolean(false);
 
-        PlayerProfile.getBackpack(dolly, backpack -> {
-
+        PlayerBackpack.getAsync(dolly, backpack -> {
             if (backpack == null) {
                 return;
             }
@@ -146,24 +141,26 @@ public class Dolly extends SimpleSlimefunItem<ItemUseHandler> {
 
             backpack.getInventory().setStorageContents(chestInventory.getContents());
 
+            boolean isDouble = false;
             // Add marker for single chests
             if (chestInventory.getSize() == 54) { // Double chest (Avoid instanceof because of weird chest class setup)
-                isDoubleChest.set(true);
+                isDouble = true;
             } else {
                 backpack.getInventory().setItem(27, LOCK_ITEM);
             }
 
             // Clear chest
             chestInventory.clear();
-            PlayerProfile.getBackpack(dolly, PlayerBackpack::markDirty);
-            validOperation.set(true);
+            Integer[] slots = new Integer[chestInventory.getSize()];
+            for (int i = 0; i < slots.length; i++) {
+                slots[i] = i;
+            }
+
+            Slimefun.getDatabaseManager().getProfileDataController().saveBackpackInventory(backpack, slots);
             dolly.setType(Material.CHEST_MINECART);
-        });
 
-        // Deals with async problems
-        if (validOperation.get()) {
-            if (isDoubleChest.get()) {
-
+            // Deals with async problems
+            if (isDouble) {
                 DoubleChest doubleChest = (DoubleChest) ((org.bukkit.block.Chest) chest.getState()).getInventory().getHolder();
 
                 // Set other side of chest to air
@@ -173,17 +170,15 @@ public class Dolly extends SimpleSlimefunItem<ItemUseHandler> {
                 } else {
                     ((org.bukkit.block.Chest) doubleChest.getLeftSide()).getLocation().getBlock().setType(Material.AIR);
                 }
-
             }
 
             chest.setType(Material.AIR);
-
             Utils.send(p, "&a你拿起了箱子");
-        }
+        }, true);
     }
 
     private void placeChest(ItemStack dolly, Block chestBlock, Player p) {
-        PlayerProfile.getBackpack(dolly, backpack -> {
+        PlayerBackpack.getAsync(dolly, backpack -> {
 
             if (backpack == null) {
                 return;
@@ -225,7 +220,7 @@ public class Dolly extends SimpleSlimefunItem<ItemUseHandler> {
                     Utils.send(p, "&a已放置箱子");
                 }
             });
-        });
+        }, false);
     }
 
     private boolean canChestFit(Block singleChestBlock, Player p, boolean singleChest) {

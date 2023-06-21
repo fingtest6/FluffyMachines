@@ -1,7 +1,11 @@
 package io.ncbpfluffybear.fluffymachines;
 
+import com.xzavier0722.mc.plugin.slimefun4.storage.callback.IAsyncReadCallback;
+import com.xzavier0722.mc.plugin.slimefun4.storage.controller.SlimefunBlockData;
+import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
+import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.collections.Pair;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.config.Config;
 import io.ncbpfluffybear.fluffymachines.listeners.KeyedCrafterListener;
@@ -22,7 +26,6 @@ import java.util.logging.Level;
 import javax.annotation.Nonnull;
 
 import lombok.SneakyThrows;
-import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import net.guizhanss.guizhanlibplugin.updater.GuizhanBuildsUpdaterWrapper;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -172,12 +175,24 @@ public class FluffyMachines extends JavaPlugin implements SlimefunAddon {
 
                     } else {
                         RayTraceResult rayResult = p.rayTraceBlocks(5d);
-                        if (rayResult != null && rayResult.getHitBlock() != null
-                            && BlockStorage.hasBlockInfo(rayResult.getHitBlock())) {
-
-                            BlockStorage.addBlockInfo(rayResult.getHitBlock(), args[1], args[2]);
-                            Utils.send(p, "&a信息已应用.");
-
+                        SlimefunBlockData blockData = (rayResult != null && rayResult.getHitBlock() != null) ?
+                                StorageCacheUtils.getBlock(rayResult.getHitBlock().getLocation()) : null;
+                        if (blockData != null) {
+                            if (blockData.isDataLoaded()) {
+                                blockData.setData(args[1], args[2]);
+                                Utils.send(p, "&a信息已应用.");
+                            } else {
+                                Slimefun.getDatabaseManager().getBlockDataController().loadBlockDataAsync(
+                                        blockData,
+                                        new IAsyncReadCallback<SlimefunBlockData>() {
+                                            @Override
+                                            public void onResult(SlimefunBlockData result) {
+                                                blockData.setData(args[1], args[2]);
+                                                Utils.send(p, "&a信息已应用.");
+                                            }
+                                        }
+                                );
+                            }
                         } else {
                             Utils.send(p, "&c你必须看向一个Slimefun方块");
                         }

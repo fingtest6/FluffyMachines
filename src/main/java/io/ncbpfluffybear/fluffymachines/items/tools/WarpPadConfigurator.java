@@ -1,5 +1,7 @@
 package io.ncbpfluffybear.fluffymachines.items.tools;
 
+import com.xzavier0722.mc.plugin.slimefun4.storage.controller.SlimefunBlockData;
+import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemSetting;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
@@ -12,7 +14,6 @@ import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
 import io.ncbpfluffybear.fluffymachines.FluffyMachines;
 import io.ncbpfluffybear.fluffymachines.utils.FluffyItems;
 import io.ncbpfluffybear.fluffymachines.utils.Utils;
-import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
@@ -59,7 +60,8 @@ public class WarpPadConfigurator extends SlimefunItem implements HologramOwner, 
         Block b = e.getClickedBlock();
         Player p = e.getPlayer();
 
-        if (BlockStorage.hasBlockInfo(b) && BlockStorage.check(b) == FluffyItems.WARP_PAD.getItem()
+        SlimefunBlockData blockData = StorageCacheUtils.getBlock(b.getLocation());
+        if (blockData != null && blockData.getSfId().equals(FluffyItems.WARP_PAD.getItem().getId())
             && Slimefun.getProtectionManager().hasPermission(p, b.getLocation(), Interaction.PLACE_BLOCK)) {
             if (SlimefunUtils.isItemSimilar(p.getInventory().getItemInMainHand(), FluffyItems.WARP_PAD_CONFIGURATOR,
                 false)) {
@@ -85,7 +87,7 @@ public class WarpPadConfigurator extends SlimefunItem implements HologramOwner, 
                         item.setItemMeta(meta);
 
                         updateHologram(b, "&a&l终点");
-                        BlockStorage.addBlockInfo(b, "type", "destination");
+                        blockData.setData("type", "destination");
                         Utils.send(p, "&3此传送装置已标记为&a终点&3并绑定到传送装置");
 
                         // Origin
@@ -124,11 +126,12 @@ public class WarpPadConfigurator extends SlimefunItem implements HologramOwner, 
     }
 
     private void registerOrigin(Block b, int x, int y, int z) {
-        BlockStorage.addBlockInfo(b, "type", "origin");
+        SlimefunBlockData blockData = StorageCacheUtils.getBlock(b.getLocation());
+        blockData.setData("type", "origin");
 
-        BlockStorage.addBlockInfo(b, "x", String.valueOf(x));
-        BlockStorage.addBlockInfo(b, "y", String.valueOf(y));
-        BlockStorage.addBlockInfo(b, "z", String.valueOf(z));
+        blockData.setData("x", String.valueOf(x));
+        blockData.setData("y", String.valueOf(y));
+        blockData.setData("z", String.valueOf(z));
 
         updateHologram(b, "&a&l起点");
     }

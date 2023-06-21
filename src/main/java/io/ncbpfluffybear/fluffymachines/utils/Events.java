@@ -1,15 +1,16 @@
 package io.ncbpfluffybear.fluffymachines.utils;
 
+import com.xzavier0722.mc.plugin.slimefun4.storage.callback.IAsyncReadCallback;
+import com.xzavier0722.mc.plugin.slimefun4.storage.controller.BlockDataController;
+import com.xzavier0722.mc.plugin.slimefun4.storage.controller.SlimefunBlockData;
+import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.ncbpfluffybear.fluffymachines.items.Barrel;
 import io.ncbpfluffybear.fluffymachines.items.FireproofRune;
 import io.ncbpfluffybear.fluffymachines.items.HelicopterHat;
 import io.ncbpfluffybear.fluffymachines.items.tools.WateringCan;
 import io.ncbpfluffybear.fluffymachines.machines.AlternateElevatorPlate;
-
-import javax.annotation.Nonnull;
-
-import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -35,6 +36,8 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import javax.annotation.Nonnull;
 
 public class Events implements Listener {
 
@@ -126,35 +129,57 @@ public class Events implements Listener {
             Player p = e.getPlayer();
             Block b = p.getLocation().subtract(0, 1, 0).getBlock();
 
-            if (BlockStorage.hasBlockInfo(b) && BlockStorage.check(b) == FluffyItems.WARP_PAD.getItem()
-                && BlockStorage.getLocationInfo(b.getLocation(), "type").equals("origin")) {
-
-                Location l = b.getLocation();
-                Location destination = new Location(b.getWorld(),
-                    Integer.parseInt(BlockStorage.getLocationInfo(l, "x")),
-                    Integer.parseInt(BlockStorage.getLocationInfo(l, "y")),
-                    Integer.parseInt(BlockStorage.getLocationInfo(l, "z")));
-
-                float yaw = p.getLocation().getYaw();
-                float pitch = p.getLocation().getPitch();
-
-                if (BlockStorage.hasBlockInfo(destination) && BlockStorage.getLocationInfo(destination, "type") != null
-                    && BlockStorage.getLocationInfo(destination, "type").equals("destination")
-                    && destination.getBlock().getRelative(BlockFace.UP).getType() == Material.AIR
-                    && destination.getBlock().getRelative(BlockFace.UP, 2).getType() == Material.AIR) {
-
-                    destination.setPitch(pitch);
-                    destination.setYaw(yaw);
-                    p.teleport(destination.add(0.5, 1, 0.5));
-
-                    p.playSound(p.getLocation(), Sound.ITEM_CHORUS_FRUIT_TELEPORT, 0.5F, 0.5F);
-                    p.spawnParticle(Particle.DRAGON_BREATH, p.getLocation(), 10);
-
-                } else {
-                    Utils.send(p, "&c缺少传送装置!");
+            SlimefunBlockData blockData = StorageCacheUtils.getBlock(b.getLocation());
+            if (blockData != null && blockData.getSfId().equals(FluffyItems.WARP_PAD.getItem().getId())) {
+                if (blockData.isDataLoaded()) {
 
                 }
             }
+        }
+    }
+
+    private void warp(SlimefunBlockData blockData, Block b, Player p) {
+        if (blockData.getData("type").equals("origin")) {
+            Location destination = new Location(b.getWorld(),
+                    Integer.parseInt(blockData.getData("x")),
+                    Integer.parseInt(blockData.getData("y")),
+                    Integer.parseInt(blockData.getData("z")));
+
+            float yaw = p.getLocation().getYaw();
+            float pitch = p.getLocation().getPitch();
+
+            BlockDataController controller = Slimefun.getDatabaseManager().getBlockDataController();
+            controller.getBlockDataAsync(
+                    destination,
+                    new IAsyncReadCallback<SlimefunBlockData>() {
+                        @Override
+                        public void onResult(SlimefunBlockData result) {
+                            if (!result.isDataLoaded()) {
+                                controller.loadBlockData(result);
+                            }
+                            if (!result.getData("type").equals("destination")
+                                    || destination.getBlock().getRelative(BlockFace.UP).getType() == Material.AIR
+                                    || destination.getBlock().getRelative(BlockFace.UP, 2).getType() == Material.AIR
+                            ) {
+                                Utils.send(p, "&c缺少传送装置!");
+                                return;
+                            }
+
+                            destination.setPitch(pitch);
+                            destination.setYaw(yaw);
+                            Slimefun.runSync(() ->{
+                                p.teleport(destination.add(0.5, 1, 0.5));
+                                p.playSound(p.getLocation(), Sound.ITEM_CHORUS_FRUIT_TELEPORT, 0.5F, 0.5F);
+                                p.spawnParticle(Particle.DRAGON_BREATH, p.getLocation(), 10);
+                            });
+                        }
+
+                        @Override
+                        public void onResultNotFound() {
+                            Utils.send(p, "&c缺少传送装置!");
+                        }
+                    }
+            );
         }
     }
 
@@ -164,8 +189,8 @@ public class Events implements Listener {
             return;
         }
 
-        String id = BlockStorage.checkID(e.getClickedBlock());
-        if (id != null && id.equals(FluffyItems.ALTERNATE_ELEVATOR_PLATE.getItemId())) {
+        SlimefunItem item = StorageCacheUtils.getSfItem(e.getClickedBlock().getLocation());
+        if (item != null && item.getId().equals(FluffyItems.ALTERNATE_ELEVATOR_PLATE.getItemId())) {
             AlternateElevatorPlate elevator = ((AlternateElevatorPlate) FluffyItems.ALTERNATE_ELEVATOR_PLATE.getItem());
             elevator.openInterface(e.getPlayer(), e.getClickedBlock());
         }
@@ -190,7 +215,7 @@ public class Events implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onBarrelBurn(BlockBurnEvent e) {
-        if (BlockStorage.check(e.getBlock()) instanceof Barrel) {
+        if (StorageCacheUtils.getSfItem(e.getBlock().getLocation()) instanceof Barrel) {
             e.setCancelled(true);
         }
     }

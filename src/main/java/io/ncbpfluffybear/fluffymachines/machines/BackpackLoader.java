@@ -1,5 +1,6 @@
 package io.ncbpfluffybear.fluffymachines.machines;
 
+import io.github.thebusybiscuit.slimefun4.api.player.PlayerBackpack;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.handlers.BlockBreakHandler;
@@ -173,7 +174,7 @@ public class BackpackLoader extends SlimefunItem implements EnergyNetComponent {
             ItemStack transferItem = inv.getItemInSlot(occupiedInputSlot);
 
             int finalOccupiedInputSlot = occupiedInputSlot;
-            PlayerProfile.getBackpack(bpItem, backpack -> {
+            PlayerBackpack.getAsync(bpItem, backpack -> {
 
                 Inventory bpinv = backpack.getInventory();
 
@@ -195,7 +196,7 @@ public class BackpackLoader extends SlimefunItem implements EnergyNetComponent {
 
                     removeCharge(b.getLocation(), ENERGY_CONSUMPTION);
                 }
-            });
+            }, false);
         }
     }
 

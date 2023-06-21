@@ -1,5 +1,6 @@
 package io.ncbpfluffybear.fluffymachines.items.tools;
 
+import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
 import io.github.thebusybiscuit.slimefun4.api.items.settings.DoubleRangeSetting;
 import io.github.thebusybiscuit.slimefun4.api.items.settings.IntRangeSetting;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
@@ -15,7 +16,6 @@ import io.github.thebusybiscuit.slimefun4.api.items.ItemSetting;
 import io.github.thebusybiscuit.slimefun4.core.handlers.ItemUseHandler;
 import io.github.thebusybiscuit.slimefun4.implementation.items.SimpleSlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
-import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.FluidCollisionMode;
@@ -160,7 +160,7 @@ public class WateringCan extends SimpleSlimefunItem<ItemUseHandler> implements C
                         double random = ThreadLocalRandom.current().nextDouble();
                         Material saplingMaterial = b.getType();
 
-                        if (BlockStorage.hasBlockInfo(b)) {
+                        if (StorageCacheUtils.hasBlock(b.getLocation())) {
                             if (exoticGardenSuccessChance.getValue() == 0) {
                                 Utils.send(p, "&cYou can not water Exotic Garden plants!");
                                 return;

@@ -2,6 +2,7 @@ package io.ncbpfluffybear.fluffymachines.utils;
 
 import dev.j3fftw.extrautils.utils.LoreBuilderDynamic;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.api.player.PlayerBackpack;
 import io.github.thebusybiscuit.slimefun4.core.attributes.MachineTier;
 import io.github.thebusybiscuit.slimefun4.core.attributes.MachineType;
 import io.github.thebusybiscuit.slimefun4.utils.LoreBuilder;
@@ -342,7 +343,7 @@ public class FluffyItems {
         "",
         "&7右键拾起箱子",
         "",
-        "&7ID: <ID>"
+        PlayerBackpack.LORE_OWNER
     );
 
     public static final SlimefunItemStack WARP_PAD = new SlimefunItemStack(

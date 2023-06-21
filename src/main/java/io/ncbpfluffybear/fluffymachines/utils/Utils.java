@@ -1,5 +1,6 @@
 package io.ncbpfluffybear.fluffymachines.utils;
 
+import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
 import io.github.thebusybiscuit.slimefun4.core.handlers.BlockBreakHandler;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.implementation.handlers.SimpleBlockBreakHandler;
@@ -7,18 +8,9 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.common.ChatColors;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.protection.Interaction;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import io.ncbpfluffybear.fluffymachines.FluffyMachines;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TreeMap;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
-import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import net.guizhanss.guizhanlib.minecraft.helper.inventory.ItemStackHelper;
-import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -30,6 +22,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitTask;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeMap;
 
 public final class Utils {
 
@@ -119,7 +117,7 @@ public final class Utils {
 
             @Override
             public void onBlockBreak(@Nonnull Block b) {
-                BlockMenu inv = BlockStorage.getInventory(b);
+                BlockMenu inv = StorageCacheUtils.getMenu(b.getLocation());
 
                 if (inv != null) {
                     inv.dropItems(b.getLocation(), inputs);

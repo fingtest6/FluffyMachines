@@ -1,17 +1,17 @@
 package io.ncbpfluffybear.fluffymachines.items;
 
+import com.xzavier0722.mc.plugin.slimefun4.storage.controller.SlimefunBlockData;
+import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
+import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.core.handlers.BlockPlaceHandler;
 import io.github.thebusybiscuit.slimefun4.core.handlers.BlockUseHandler;
 import io.github.thebusybiscuit.slimefun4.implementation.items.magical.talismans.Talisman;
 import io.github.thebusybiscuit.slimefun4.libraries.paperlib.PaperLib;
 import io.ncbpfluffybear.fluffymachines.utils.Utils;
-import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
-import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
-import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
-import me.mrCookieSlime.Slimefun.api.BlockStorage;
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Tag;
@@ -50,7 +50,7 @@ public class EnderChestExtractionNode extends SlimefunItem {
     @Override
     public void preRegister() {
         this.addItemHandler(new BlockTicker() {
-            public void tick(Block b, SlimefunItem sf, Config data) {
+            public void tick(Block b, SlimefunItem sf, SlimefunBlockData data) {
                 EnderChestExtractionNode.this.tick(b);
             }
 
@@ -85,7 +85,7 @@ public class EnderChestExtractionNode extends SlimefunItem {
         BlockState state = PaperLib.getBlockState(b.getRelative(face), false).getState();
 
         if (state instanceof InventoryHolder) {
-            Player p = Bukkit.getOfflinePlayer(UUID.fromString(BlockStorage.getLocationInfo(b.getLocation(), "owner"))).getPlayer();
+            Player p = Bukkit.getOfflinePlayer(UUID.fromString(StorageCacheUtils.getData(b.getLocation(), "owner"))).getPlayer();
 
             // Ender chest null check necessary because Bukkit yes.
             if (p != null) {
@@ -152,8 +152,8 @@ public class EnderChestExtractionNode extends SlimefunItem {
                 Block b = e.getBlock();
 
                 if (!e.isCancelled()) {
-                    BlockStorage.addBlockInfo(b, "owner", p.getUniqueId().toString());
-                    BlockStorage.addBlockInfo(b, "playername", p.getDisplayName());
+                    StorageCacheUtils.setData(b.getLocation(), "owner", p.getUniqueId().toString());
+                    StorageCacheUtils.setData(b.getLocation(), "playername", p.getDisplayName());
                     Utils.send(p, "&a末地货运节点已绑定到ID为" + p.getDisplayName()
                         + " &7(UUID: " + p.getUniqueId() + ")");
                 }
@@ -166,8 +166,8 @@ public class EnderChestExtractionNode extends SlimefunItem {
             Player p = e.getPlayer();
             Block b = e.getClickedBlock().get();
             Utils.send(p, "&e此末地货运节点是属于ID为" +
-                BlockStorage.getLocationInfo(b.getLocation(), "playername")
-                + " &7(UUID: " + BlockStorage.getLocationInfo(b.getLocation(), "owner") + ")");
+                StorageCacheUtils.getData(b.getLocation(), "playername")
+                + " &7(UUID: " + StorageCacheUtils.getData(b.getLocation(), "owner") + ")");
         };
     }
 }

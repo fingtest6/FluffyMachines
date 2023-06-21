@@ -1,5 +1,7 @@
 package io.ncbpfluffybear.fluffymachines.items.tools;
 
+import com.xzavier0722.mc.plugin.slimefun4.storage.controller.SlimefunBlockData;
+import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
@@ -20,7 +22,6 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Nonnull;
 
-import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -104,12 +105,13 @@ public class CargoManipulator extends SimpleSlimefunItem<ItemUseHandler> impleme
      */
     private void copyNode(Block parent, Player p, SlimefunItemStack nodeType) {
         // Copy BlockStorage data
-        JSONObject nodeData = new JSONObject(BlockStorage.getBlockInfoAsJson(parent));
+        SlimefunBlockData blockData = StorageCacheUtils.getBlock(parent.getLocation());
+        JSONObject nodeData = new JSONObject(blockData.getAllData());
 
         ItemStack[] filterItems = new ItemStack[9];
         if (nodeType != SlimefunItems.CARGO_OUTPUT_NODE) { // No inventory
             // Copy inventory into map
-            BlockMenu parentInventory = BlockStorage.getInventory(parent);
+            BlockMenu parentInventory = blockData.getBlockMenu();
             for (int i = 0; i < 9; i++) { // Iterate through all slots in cargo filter
                 ItemStack menuItem = parentInventory.getItemInSlot(CARGO_SLOTS[i]);
                 if (menuItem != null) {
@@ -151,11 +153,12 @@ public class CargoManipulator extends SimpleSlimefunItem<ItemUseHandler> impleme
         }
 
         // Set the data
-        BlockStorage.setBlockInfo(child, jsonData.toString(), false);
+        SlimefunBlockData blockData = StorageCacheUtils.getBlock(child.getLocation());
+        jsonData.toMap().forEach((k, v) -> blockData.setData(k, v.toString()));
 
         if (nodeType != SlimefunItems.CARGO_OUTPUT_NODE) {
             // Set the filter
-            BlockMenu nodeMenu = BlockStorage.getInventory(child);
+            BlockMenu nodeMenu = blockData.getBlockMenu();
             ItemStack[] filterItems = nodeSettings.getSecondValue();
             Inventory playerInventory = p.getInventory();
 
@@ -195,7 +198,6 @@ public class CargoManipulator extends SimpleSlimefunItem<ItemUseHandler> impleme
         }
 
         // Force menu update
-        BlockStorage.getStorage(child.getWorld()).reloadInventory(child.getLocation());
         Utils.send(p, "&a已应用 " + savedNodeType.getDisplayName() + " &a的设置.");
         createParticle(child, Color.LIME);
 
@@ -207,27 +209,25 @@ public class CargoManipulator extends SimpleSlimefunItem<ItemUseHandler> impleme
      */
     private void clearNode(Block node, Player p, SlimefunItemStack nodeType) {
         // Clear node settings
-        BlockStorage.addBlockInfo(node, "owner", p.getUniqueId().toString());
-        BlockStorage.addBlockInfo(node, "frequency", "0");
+        SlimefunBlockData blockData = StorageCacheUtils.getBlock(node.getLocation());
+        blockData.setData("owner", p.getUniqueId().toString());
+        blockData.setData("frequency", "0");
 
         // These settings are only for Input and Advanced Output nodes
         if (nodeType != SlimefunItems.CARGO_OUTPUT_NODE) {
             // AbstractFilterNode settings
-            BlockStorage.addBlockInfo(node, "index", "0");
-            BlockStorage.addBlockInfo(node, "filter-type", "whitelist");
-            BlockStorage.addBlockInfo(node, "filter-lore", String.valueOf(true));
-            BlockStorage.addBlockInfo(node, "filter-durability", String.valueOf(false));
+            blockData.setData("index", "0");
+            blockData.setData("filter-type", "whitelist");
+            blockData.setData("filter-lore", String.valueOf(true));
+            blockData.setData("filter-durability", String.valueOf(false));
 
             if (nodeType == SlimefunItems.CARGO_INPUT_NODE) {
                 // CargoInputNode settings
-                BlockStorage.addBlockInfo(node, "round-robin", String.valueOf(false));
-                BlockStorage.addBlockInfo(node, "smart-fill", String.valueOf(false));
+                blockData.setData("round-robin", String.valueOf(false));
+                blockData.setData("smart-fill", String.valueOf(false));
             }
 
             clearNodeFilter(node, p);
-
-            // Force update
-            BlockStorage.getStorage(node.getWorld()).reloadInventory(node.getLocation());
 
             Utils.send(p, "&a该货运节点配置已清除");
             createParticle(node, Color.fromRGB(255, 152, 56)); // Light orange
@@ -236,7 +236,7 @@ public class CargoManipulator extends SimpleSlimefunItem<ItemUseHandler> impleme
 
     private void clearNodeFilter(Block node, Player p) {
         // Empty filter contents
-        BlockMenu nodeMenu = BlockStorage.getInventory(node);
+        BlockMenu nodeMenu = StorageCacheUtils.getMenu(node.getLocation());
         for (int i = 0; i < 9; i++) {
             clearFilterSlot(nodeMenu, CARGO_SLOTS[i], p);
         }
@@ -258,13 +258,8 @@ public class CargoManipulator extends SimpleSlimefunItem<ItemUseHandler> impleme
             return null;
         }
 
-        String blockId = BlockStorage.checkID(b);
-
-        if (blockId == null) {
-            return null;
-        }
-
-        return (SlimefunItemStack) SlimefunItem.getById(blockId).getItem();
+        SlimefunItem item = StorageCacheUtils.getSfItem(b.getLocation());
+        return item == null ? null : (SlimefunItemStack) item.getItem();
     }
 
     private void createParticle(Block b, Color color) {
