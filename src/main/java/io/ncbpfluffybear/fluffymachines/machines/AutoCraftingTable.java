@@ -1,5 +1,7 @@
 package io.ncbpfluffybear.fluffymachines.machines;
 
+import com.xzavier0722.mc.plugin.slimefun4.storage.controller.SlimefunBlockData;
+import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
 import io.github.thebusybiscuit.slimefun4.api.events.BlockPlacerPlaceEvent;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
@@ -14,15 +16,9 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import io.ncbpfluffybear.fluffymachines.FluffyMachines;
 import io.ncbpfluffybear.fluffymachines.utils.Utils;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import javax.annotation.Nonnull;
-import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu.AdvancedMenuClickHandler;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
 import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
-import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
@@ -38,6 +34,11 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * This {@link SlimefunItem} automatically
@@ -68,9 +69,8 @@ public class AutoCraftingTable extends SlimefunItem implements EnergyNetComponen
 
             @Override
             public void newInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-                if (!BlockStorage.hasBlockInfo(b)
-                        || BlockStorage.getLocationInfo(b.getLocation(), "enabled") == null
-                        || BlockStorage.getLocationInfo(b.getLocation(), "enabled").equals(String.valueOf(false))) {
+                SlimefunBlockData blockData = StorageCacheUtils.getBlock(b.getLocation());
+                if (blockData.getData("enabled") == null || String.valueOf(false).equals(blockData.getData("enabled"))) {
                     menu.replaceExistingItem(4, new CustomItemStack(Material.GUNPOWDER, "&7启用: &4\u2718",
                             "", "&e> 点击启用")
                     );
@@ -78,7 +78,7 @@ public class AutoCraftingTable extends SlimefunItem implements EnergyNetComponen
                             new CustomItemStack(new ItemStack(Material.GRAY_STAINED_GLASS_PANE),
                                     "&7&l禁用"));
                     menu.addMenuClickHandler(4, (p, slot, item, action) -> {
-                        BlockStorage.addBlockInfo(b, "enabled", String.valueOf(true));
+                        blockData.setData("enabled", String.valueOf(true));
                         newInstance(menu, b);
                         return false;
                     });
@@ -86,7 +86,7 @@ public class AutoCraftingTable extends SlimefunItem implements EnergyNetComponen
                     menu.replaceExistingItem(4, new CustomItemStack(Material.REDSTONE, "&7启用: &2\u2714",
                             "", "&e> 点击禁用"));
                     menu.addMenuClickHandler(4, (p, slot, item, action) -> {
-                        BlockStorage.addBlockInfo(b, "enabled", String.valueOf(false));
+                        blockData.setData("enabled", String.valueOf(false));
                         newInstance(menu, b);
                         return false;
                     });
@@ -160,7 +160,7 @@ public class AutoCraftingTable extends SlimefunItem implements EnergyNetComponen
             @Override
             public void onPlayerBreak(@Nonnull BlockBreakEvent e, @Nonnull ItemStack item, @Nonnull List<ItemStack> drops) {
                 Block b = e.getBlock();
-                BlockMenu inv = BlockStorage.getInventory(b);
+                BlockMenu inv = StorageCacheUtils.getMenu(b.getLocation());
                 Location location = b.getLocation();
 
                 if (inv != null) {
@@ -176,12 +176,12 @@ public class AutoCraftingTable extends SlimefunItem implements EnergyNetComponen
 
             @Override
             public void onPlayerPlace(@Nonnull BlockPlaceEvent e) {
-                BlockStorage.addBlockInfo(e.getBlock(), "enabled", String.valueOf(false));
+                StorageCacheUtils.setData(e.getBlock().getLocation(), "enabled", String.valueOf(false));
             }
 
             @Override
             public void onBlockPlacerPlace(@Nonnull BlockPlacerPlaceEvent e) {
-                BlockStorage.addBlockInfo(e.getBlock(), "enabled", String.valueOf(false));
+                StorageCacheUtils.setData(e.getBlock().getLocation(), "enabled", String.valueOf(false));
             }
         };
     }
@@ -254,7 +254,7 @@ public class AutoCraftingTable extends SlimefunItem implements EnergyNetComponen
         addItemHandler(new BlockTicker() {
 
             @Override
-            public void tick(Block b, SlimefunItem sf, Config data) {
+            public void tick(Block b, SlimefunItem sf, SlimefunBlockData data) {
                 AutoCraftingTable.this.tick(b);
             }
 
@@ -267,12 +267,12 @@ public class AutoCraftingTable extends SlimefunItem implements EnergyNetComponen
 
     protected void tick(Block block) {
 
-        if (BlockStorage.getLocationInfo(block.getLocation(), "enabled").equals("false")) {
+        if ("false".equals(StorageCacheUtils.getData(block.getLocation(), "enabled"))) {
             return;
         }
 
         if (getCharge(block.getLocation()) < getEnergyConsumption()) {
-            BlockMenu menu = BlockStorage.getInventory(block);
+            BlockMenu menu = StorageCacheUtils.getMenu(block.getLocation());
             if (menu.hasViewer()) {
                 menu.replaceExistingItem(statusSlot, new CustomItemStack(new ItemStack(Material.RED_STAINED_GLASS_PANE),
                         "&c&l电量不足"));
@@ -284,7 +284,7 @@ public class AutoCraftingTable extends SlimefunItem implements EnergyNetComponen
     }
 
     private void getResult(Block block) {
-        BlockMenu menu = BlockStorage.getInventory(block);
+        BlockMenu menu = StorageCacheUtils.getMenu(block.getLocation());
         ItemStack invItem = menu.getItemInSlot(KEY_SLOT);
 
         // Make sure we have a key item

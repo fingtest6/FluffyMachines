@@ -1,28 +1,28 @@
 package io.ncbpfluffybear.fluffymachines.objects;
 
+import com.xzavier0722.mc.plugin.slimefun4.storage.controller.SlimefunBlockData;
+import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
 import io.github.thebusybiscuit.slimefun4.api.events.BlockPlacerPlaceEvent;
+import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.handlers.BlockBreakHandler;
 import io.github.thebusybiscuit.slimefun4.core.handlers.BlockPlaceHandler;
 import io.github.thebusybiscuit.slimefun4.core.multiblocks.MultiBlockMachine;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.protection.Interaction;
 import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
-import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
-import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
-import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
-import me.mrCookieSlime.Slimefun.api.BlockStorage;
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
-import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
-import io.github.thebusybiscuit.slimefun4.libraries.dough.protection.Interaction;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -71,14 +71,13 @@ public class AutoCrafter extends SlimefunItem implements EnergyNetComponent {
 
             @Override
             public void newInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-                if (!BlockStorage.hasBlockInfo(b)
-                    || BlockStorage.getLocationInfo(b.getLocation(), "enabled") == null
-                    || BlockStorage.getLocationInfo(b.getLocation(), "enabled").equals(String.valueOf(false))) {
+                SlimefunBlockData blockData = StorageCacheUtils.getBlock(b.getLocation());
+                if (blockData.getData("enabled") == null || String.valueOf(false).equals(blockData.getData("enabled"))) {
                     menu.replaceExistingItem(6, new CustomItemStack(Material.GUNPOWDER, "&7启用: &4\u2718", "",
                         "&e> 点击启用")
                     );
                     menu.addMenuClickHandler(6, (p, slot, item, action) -> {
-                        BlockStorage.addBlockInfo(b, "enabled", String.valueOf(true));
+                        blockData.setData("enabled", String.valueOf(true));
                         newInstance(menu, b);
                         return false;
                     });
@@ -87,7 +86,7 @@ public class AutoCrafter extends SlimefunItem implements EnergyNetComponent {
                         "", "&e> 点击禁用")
                     );
                     menu.addMenuClickHandler(6, (p, slot, item, action) -> {
-                        BlockStorage.addBlockInfo(b, "enabled", String.valueOf(false));
+                        blockData.setData("enabled", String.valueOf(false));
                         newInstance(menu, b);
                         return false;
                     });
@@ -141,12 +140,12 @@ public class AutoCrafter extends SlimefunItem implements EnergyNetComponent {
 
             @Override
             public void onPlayerPlace(@Nonnull BlockPlaceEvent e) {
-                BlockStorage.addBlockInfo(e.getBlock(), "enabled", String.valueOf(false));
+                StorageCacheUtils.setData(e.getBlock().getLocation(), "enabled", String.valueOf(false));
             }
 
             @Override
             public void onBlockPlacerPlace(@Nonnull BlockPlacerPlaceEvent e) {
-                BlockStorage.addBlockInfo(e.getBlock(), "enabled", String.valueOf(false));
+                StorageCacheUtils.setData(e.getBlock().getLocation(), "enabled", String.valueOf(false));
             }
         };
     }
@@ -156,7 +155,7 @@ public class AutoCrafter extends SlimefunItem implements EnergyNetComponent {
             @Override
             public void onPlayerBreak(@Nonnull BlockBreakEvent e, @Nonnull ItemStack i, @Nonnull List<ItemStack> list) {
                 Block b = e.getBlock();
-                BlockMenu inv = BlockStorage.getInventory(b);
+                BlockMenu inv = StorageCacheUtils.getMenu(b.getLocation());
 
                 if (inv != null) {
                     inv.dropItems(b.getLocation(), getInputSlots());
@@ -224,7 +223,7 @@ public class AutoCrafter extends SlimefunItem implements EnergyNetComponent {
         addItemHandler(new BlockTicker() {
 
             @Override
-            public void tick(Block b, SlimefunItem sf, Config data) {
+            public void tick(Block b, SlimefunItem sf, SlimefunBlockData data) {
                 AutoCrafter.this.tick(b);
             }
 
@@ -236,7 +235,7 @@ public class AutoCrafter extends SlimefunItem implements EnergyNetComponent {
     }
 
     protected void tick(Block block) {
-        if (BlockStorage.getLocationInfo(block.getLocation(), "enabled").equals(String.valueOf(false))) {
+        if (String.valueOf(false).equals(StorageCacheUtils.getData(block.getLocation(), "enabled"))) {
             return;
         }
 
@@ -248,7 +247,7 @@ public class AutoCrafter extends SlimefunItem implements EnergyNetComponent {
     }
 
     private void craftIfValid(Block block) {
-        BlockMenu menu = BlockStorage.getInventory(block);
+        BlockMenu menu = StorageCacheUtils.getMenu(block.getLocation());
 
         // Make sure at least 1 slot is free
         for (int outSlot : getOutputSlots()) {

@@ -1,26 +1,26 @@
 package io.ncbpfluffybear.fluffymachines.multiblocks.components;
 
+import com.xzavier0722.mc.plugin.slimefun4.storage.controller.SlimefunBlockData;
+import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
+import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemSetting;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.core.handlers.BlockBreakHandler;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
+import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.protection.Interaction;
+import io.ncbpfluffybear.fluffymachines.multiblocks.Foundry;
 import io.ncbpfluffybear.fluffymachines.objects.NonHopperableBlock;
 import io.ncbpfluffybear.fluffymachines.utils.Constants;
 import io.ncbpfluffybear.fluffymachines.utils.Utils;
-import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
-import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
-import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
-import me.mrCookieSlime.Slimefun.api.BlockStorage;
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
-import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
-import io.github.thebusybiscuit.slimefun4.libraries.dough.protection.Interaction;
-import io.ncbpfluffybear.fluffymachines.multiblocks.Foundry;
 import net.guizhanss.guizhanlib.slimefun.items.Metals;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -89,13 +89,13 @@ public class SuperheatedFurnace extends NonHopperableBlock {
 
             @Override
             public void newInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-                if (BlockStorage.getLocationInfo(b.getLocation(), "stored") == null) {
+                if (StorageCacheUtils.getData(b.getLocation(), "stored") == null) {
 
                     menu.replaceExistingItem(4, new CustomItemStack(Material.GUNPOWDER, "&6可用矿粉: &e0", "&a> &e左键点击&a取出1个", "&a> &e右键点击&a取出1组"));
                     menu.replaceExistingItem(7, new CustomItemStack(Material.IRON_INGOT, "&6可用锭: &e0", "&a> &e左键点击&a取出1个", "&a> &e右键点击&a取出1组"));
                     menu.replaceExistingItem(1, new CustomItemStack(Material.CHEST, "&6已存储矿粉: &e0 &7(0%)", "&b类型: 无", "&7组: 0"));
 
-                    BlockStorage.addBlockInfo(b, "stored", "0");
+                    StorageCacheUtils.setData(b.getLocation(), "stored", "0");
                 }
 
                 menu.addMenuClickHandler(1, (p, slot, item, action) -> false);
@@ -145,7 +145,7 @@ public class SuperheatedFurnace extends NonHopperableBlock {
             public void onPlayerBreak(@Nonnull BlockBreakEvent e, @Nonnull ItemStack item, @Nonnull List<ItemStack> drops) {
                 Block b = e.getBlock();
                 Player p = e.getPlayer();
-                BlockMenu inv = BlockStorage.getInventory(b);
+                BlockMenu inv = StorageCacheUtils.getMenu(b.getLocation());
 
                 if (inv != null) {
 
@@ -196,7 +196,7 @@ public class SuperheatedFurnace extends NonHopperableBlock {
                                 b.getWorld().dropItemNaturally(b.getLocation(), new CustomItemStack(dust, toRemove));
                             }
 
-                            BlockStorage.addBlockInfo(b, "stored", String.valueOf(stored - OVERFLOW_AMOUNT));
+                            StorageCacheUtils.setData(b.getLocation(), "stored", String.valueOf(stored - OVERFLOW_AMOUNT));
 
                             e.setCancelled(true);
                             updateIndicator(b);
@@ -216,18 +216,21 @@ public class SuperheatedFurnace extends NonHopperableBlock {
                                 b.getWorld().dropItemNaturally(b.getLocation(), new CustomItemStack(dust, stored));
                             }
 
-                            if (BlockStorage.getLocationInfo(b.getLocation(), "stand") != null) {
-                                Bukkit.getEntity(UUID.fromString(BlockStorage.getLocationInfo(b.getLocation(), "stand"))).remove();
+                            String stand = StorageCacheUtils.getData(b.getLocation(), "stand");
+                            if (stand != null) {
+                                Bukkit.getEntity(UUID.fromString(stand)).remove();
                             }
 
                             // In case they use an explosive pick
-                            BlockStorage.addBlockInfo(b, "stored", "0");
+                            StorageCacheUtils.setData(b.getLocation(), "stored", "0");
                             updateIndicator(b);
                             return;
                         }
                     }
-                    if (BlockStorage.getLocationInfo(b.getLocation(), "stand") != null) {
-                        Entity en = Bukkit.getEntity(UUID.fromString(BlockStorage.getLocationInfo(b.getLocation(), "stand")));
+
+                    String stand = StorageCacheUtils.getData(b.getLocation(), "stand");
+                    if (stand != null) {
+                        Entity en = Bukkit.getEntity(UUID.fromString(stand));
                         if (en != null) {
                             en.remove();
                         }
@@ -258,7 +261,7 @@ public class SuperheatedFurnace extends NonHopperableBlock {
         addItemHandler(new BlockTicker() {
 
             @Override
-            public void tick(Block b, SlimefunItem sf, Config data) {
+            public void tick(Block b, SlimefunItem sf, SlimefunBlockData data) {
                 SuperheatedFurnace.this.tick(b);
             }
 
@@ -270,7 +273,7 @@ public class SuperheatedFurnace extends NonHopperableBlock {
     }
 
     protected void tick(Block b) {
-        BlockMenu inv = BlockStorage.getInventory(b);
+        BlockMenu inv = StorageCacheUtils.getMenu(b.getLocation());
 
         ItemStack inputItem = inv.getItemInSlot(INPUT_SLOT);
 
@@ -346,7 +349,7 @@ public class SuperheatedFurnace extends NonHopperableBlock {
     }
 
     private void updateIndicator(Block b) {
-        BlockMenu inv = BlockStorage.getInventory(b);
+        BlockMenu inv = StorageCacheUtils.getMenu(b.getLocation());
         String stored = getBlockInfo(b.getLocation(), "stored");
         String type = Metals.getType(getBlockInfo(b.getLocation(), "type"));
 
@@ -468,10 +471,10 @@ public class SuperheatedFurnace extends NonHopperableBlock {
     }
 
     private void setBlockInfo(Block b, String key, String data) {
-        BlockStorage.addBlockInfo(b, key, data);
+        StorageCacheUtils.setData(b.getLocation(), key, data);
     }
 
     private String getBlockInfo(Location l, String key) {
-        return BlockStorage.getLocationInfo(l, key);
+        return StorageCacheUtils.getData(l, key);
     }
 }

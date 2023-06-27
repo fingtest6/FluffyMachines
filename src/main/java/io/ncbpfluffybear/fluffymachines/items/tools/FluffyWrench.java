@@ -1,22 +1,21 @@
 package io.ncbpfluffybear.fluffymachines.items.tools;
 
+import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
+import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.core.attributes.DamageableItem;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.attributes.Rechargeable;
 import io.github.thebusybiscuit.slimefun4.core.handlers.ItemUseHandler;
 import io.github.thebusybiscuit.slimefun4.core.networks.cargo.CargoNet;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
+import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.implementation.items.SimpleSlimefunItem;
 import io.github.thebusybiscuit.slimefun4.implementation.items.cargo.TrashCan;
-import io.ncbpfluffybear.fluffymachines.FluffyMachines;
-import io.ncbpfluffybear.fluffymachines.utils.Constants;
-import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
-import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
-import me.mrCookieSlime.Slimefun.api.BlockStorage;
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.protection.Interaction;
+import io.ncbpfluffybear.fluffymachines.FluffyMachines;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -82,7 +81,7 @@ public class FluffyWrench extends SimpleSlimefunItem<ItemUseHandler> implements 
             block.getLocation(), Interaction.BREAK_BLOCK)
         ) {
             e.setCancelled(true);
-            SlimefunItem slimefunBlock = BlockStorage.check(block);
+            SlimefunItem slimefunBlock = StorageCacheUtils.getSfItem(block.getLocation());
 
             // Check if slimefunBlock is not a machine or a cargo component
             if (slimefunBlock == null
@@ -107,7 +106,7 @@ public class FluffyWrench extends SimpleSlimefunItem<ItemUseHandler> implements 
         BlockBreakEvent breakEvent = new BlockBreakEvent(block, p);
         Bukkit.getPluginManager().callEvent(breakEvent);
         if (!breakEvent.isCancelled()) {
-            BlockStorage.clearBlockInfo(block);
+            Slimefun.getDatabaseManager().getBlockDataController().removeBlock(block.getLocation());
             block.setType(Material.AIR);
         }
     }
