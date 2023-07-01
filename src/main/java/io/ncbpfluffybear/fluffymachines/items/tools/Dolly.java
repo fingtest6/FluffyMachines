@@ -108,15 +108,17 @@ public class Dolly extends SimpleSlimefunItem<ItemUseHandler> {
     }
 
     private void buildDolly(ItemStack dolly, Player p) {
-        PlayerProfile.get(p, profile -> PlayerBackpack.bindItem(
-                dolly,
-                Slimefun.getDatabaseManager().getProfileDataController().createBackpack(
-                        p,
-                        "&b箱子搬运车",
-                        profile.nextBackpackNum(),
-                        54
-                )
-        ));
+        if (!PlayerBackpack.getBackpackUUID(dolly.getItemMeta()).isPresent()) {
+            PlayerProfile.get(p, profile -> PlayerBackpack.bindItem(
+                    dolly,
+                    Slimefun.getDatabaseManager().getProfileDataController().createBackpack(
+                            p,
+                            "&b箱子搬运车",
+                            profile.nextBackpackNum(),
+                            54
+                    )
+            ));
+        }
     }
 
     private void pickupChest(ItemStack dolly, Block chest, Player p) {
