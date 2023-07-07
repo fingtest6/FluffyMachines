@@ -108,7 +108,7 @@
         <dependency>
             <groupId>com.github.StarWishsama</groupId>
             <artifactId>Slimefun4</artifactId>
-            <version>2023.06</version>
+            <version>fe3bb7fcd2</version>
             <scope>provided</scope>
         </dependency>
 
@@ -162,7 +162,7 @@
         <dependency>
             <groupId>net.guizhanss</groupId>
             <artifactId>GuizhanLibPlugin</artifactId>
-            <version>1.0.2</version>
+            <version>1.2.2</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

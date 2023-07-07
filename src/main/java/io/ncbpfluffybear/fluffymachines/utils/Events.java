@@ -131,9 +131,43 @@ public class Events implements Listener {
 
             SlimefunBlockData blockData = StorageCacheUtils.getBlock(b.getLocation());
             if (blockData != null && blockData.getSfId().equals(FluffyItems.WARP_PAD.getItem().getId())) {
-                if (blockData.isDataLoaded()) {
+                StorageCacheUtils.executeAfterLoad(blockData, () -> {
+                    if (!blockData.getData("type").equals("origin")) {
+                        return;
+                    }
 
-                }
+                    Location l = b.getLocation();
+                    Location destination = new Location(b.getWorld(),
+                        Integer.parseInt(blockData.getData("x")),
+                        Integer.parseInt(blockData.getData("y")),
+                        Integer.parseInt(blockData.getData("z")));
+
+                    float yaw = p.getLocation().getYaw();
+                    float pitch = p.getLocation().getPitch();
+
+                    SlimefunBlockData destData = StorageCacheUtils.getBlock(destination);
+                    if (destData != null
+                        && destination.getBlock().getRelative(BlockFace.UP).getType().isAir()
+                        && destination.getBlock().getRelative(BlockFace.UP, 2).getType().isAir()) {
+
+                        StorageCacheUtils.executeAfterLoad(destData, () -> {
+                            if (!destData.getData("type").equals("destination")) {
+                                return;
+                            }
+                            destination.setPitch(pitch);
+                            destination.setYaw(yaw);
+
+                            Utils.runSync(() -> {
+                                p.teleport(destination.add(0.5, 1, 0.5));
+
+                                p.playSound(p.getLocation(), Sound.ITEM_CHORUS_FRUIT_TELEPORT, 0.5F, 0.5F);
+                                p.spawnParticle(Particle.DRAGON_BREATH, p.getLocation(), 10);
+                            }, 1);
+                        }, false);
+                    } else {
+                        Utils.send(p, "&c缺少传送装置!");
+                    }
+                }, false);
             }
         }
     }
