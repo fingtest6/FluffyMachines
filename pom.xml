@@ -60,7 +60,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>3.5.1</version>
                 <configuration>
                     <minimizeJar>true</minimizeJar>
                     <relocations>
@@ -108,7 +108,7 @@
         <dependency>
             <groupId>com.github.StarWishsama</groupId>
             <artifactId>Slimefun4</artifactId>
-            <version>fe3bb7fcd2</version>
+            <version>eabaa21b05</version>
             <scope>provided</scope>
         </dependency>
 
@@ -162,7 +162,7 @@
         <dependency>
             <groupId>net.guizhanss</groupId>
             <artifactId>GuizhanLibPlugin</artifactId>
-            <version>1.2.2</version>
+            <version>1.6.1</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

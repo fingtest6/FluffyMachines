@@ -11,7 +11,6 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.config.Config;
 import io.ncbpfluffybear.fluffymachines.listeners.KeyedCrafterListener;
 import io.ncbpfluffybear.fluffymachines.utils.Constants;
 import io.ncbpfluffybear.fluffymachines.utils.Events;
-import io.ncbpfluffybear.fluffymachines.utils.GlowEnchant;
 import io.ncbpfluffybear.fluffymachines.utils.McMMOEvents;
 import io.ncbpfluffybear.fluffymachines.utils.Utils;
 
@@ -26,13 +25,15 @@ import java.util.logging.Level;
 import javax.annotation.Nonnull;
 
 import lombok.SneakyThrows;
-import net.guizhanss.guizhanlibplugin.updater.GuizhanBuildsUpdaterWrapper;
+import net.guizhanss.guizhanlibplugin.updater.GuizhanUpdater;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Registry;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.enchantments.EnchantmentWrapper;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
@@ -57,21 +58,8 @@ public class FluffyMachines extends JavaPlugin implements SlimefunAddon {
         Config cfg = new Config(this);
 
         if (cfg.getBoolean("options.auto-update") && getDescription().getVersion().startsWith("Build ")) {
-            GuizhanBuildsUpdaterWrapper.start(this, getFile(), "baoad", "FluffyMachines", "master", false);
+            GuizhanUpdater.start(this, getFile(), "SlimefunGuguProject", "FluffyMachines", "master");
         }
-
-        // Register Glow
-        try {
-            if (!Enchantment.isAcceptingRegistrations()) {
-                Field accepting = Enchantment.class.getDeclaredField("acceptingNew");
-                accepting.setAccessible(true);
-                accepting.set(null, true);
-            }
-        } catch (IllegalAccessException | NoSuchFieldException ignored) {
-            getLogger().warning("无法注册发光附魔");
-        }
-
-        registerGlow();
 
         // Register ACT Recipes
         Iterator<Recipe> recipeIterator = Bukkit.recipeIterator();
@@ -222,18 +210,6 @@ public class FluffyMachines extends JavaPlugin implements SlimefunAddon {
 
         if (players > 0) {
             Bukkit.getLogger().log(Level.INFO, "已自动保存 {0} 位玩家的数据!", players);
-        }
-    }
-
-    private void registerGlow() {
-        Enchantment glowEnchantment = new GlowEnchant(Constants.GLOW_ENCHANT, new String[] {
-            "SMALL_PORTABLE_CHARGER", "MEDIUM_PORTABLE_CHARGER", "BIG_PORTABLE_CHARGER",
-            "LARGE_PORTABLE_CHARGER", "CARBONADO_PORTABLE_CHARGER", "PAXEL"
-        });
-
-        // Prevent double-registration errors
-        if (Enchantment.getByKey(glowEnchantment.getKey()) == null) {
-            Enchantment.registerEnchantment(glowEnchantment);
         }
     }
 
