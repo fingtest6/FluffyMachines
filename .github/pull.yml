@@ -5,7 +5,5 @@ rules:
     mergeMethod: merge
     assignees:
       - ybw0014
-      - baoad
     conflictReviewers:
       - ybw0014
-      - baoad
