@@ -64,6 +64,11 @@ public class AlternateElevatorPlate extends SimpleSlimefunItem<BlockUseHandler> 
         };
     }
 
+    @Override
+    public boolean loadDataByDefault() {
+        return true;
+    }
+
     @Nonnull
     public Set<UUID> getUsers() {
         return users;
