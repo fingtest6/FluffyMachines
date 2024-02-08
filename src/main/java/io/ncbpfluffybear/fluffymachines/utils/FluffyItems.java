@@ -400,7 +400,7 @@ public class FluffyItems {
         Material.POLISHED_BLACKSTONE_PRESSURE_PLATE,
         "&3备用电梯板",
         "",
-        "&f每成需要放置一个",
+        "&f每层需要放置一个",
         "&f电梯都要在同一条垂直线.",
         "",
         "&e右键单击&7来命名",
