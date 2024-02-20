@@ -449,6 +449,10 @@ public class Barrel extends NonHopperableBlock implements DoubleHologramOwner {
         String hasHolo = StorageCacheUtils.getData(b.getLocation(), "holo");
         int stored = getStored(b);
         String itemName = "";
+        ItemStack item = inv.getItemInSlot(DISPLAY_SLOT);
+        if (item == null) {
+            return;
+        }
 
         String storedPercent = doubleRoundAndFade((double) stored / (double) capacity * 100);
         String storedStacks =
