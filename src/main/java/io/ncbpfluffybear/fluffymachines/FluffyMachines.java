@@ -114,11 +114,6 @@ public class FluffyMachines extends JavaPlugin implements SlimefunAddon {
         getServer().getPluginManager().registerEvents(new KeyedCrafterListener(), this);
 
         final Metrics metrics = new Metrics(this, 8927);
-
-        getLogger().log(Level.INFO, ChatColor.GREEN + "你好！要共享服务器到" +
-            "Slimefun社区吗?");
-        getLogger().log(Level.INFO, ChatColor.GREEN + "加入官方Slimefun服务器" +
-            "https://discord.gg/slimefun");
     }
 
     @Override
