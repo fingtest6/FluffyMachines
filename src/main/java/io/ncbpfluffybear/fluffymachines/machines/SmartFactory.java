@@ -94,8 +94,8 @@ public class SmartFactory extends SlimefunItem implements EnergyNetComponent, Re
                 this.addItem(9, new CustomItemStack(Material.BLACK_STAINED_GLASS_PANE, "&7煤炭区",
                     "&e该行的格子会接收来自货运的煤炭"
                 ));
-                this.addItem(18, new CustomItemStack(Material.YELLOW_STAINED_GLASS_PANE, "&b矿粉区",
-                    "&e剩余的格子会接收来自货运的任何物品", "&e货运仅会补充现有的矿粉"
+                this.addItem(18, new CustomItemStack(Material.YELLOW_STAINED_GLASS_PANE, "&b其他物品区",
+                    "&e剩余的格子会接收来自货运的任何其他物品", "&e货运仅会补充现有的物品", "&e不会填充空的格子"
                 ));
                 this.addMenuClickHandler(RECIPE_SLOT, ChestMenuUtils.getEmptyClickHandler());
             }
