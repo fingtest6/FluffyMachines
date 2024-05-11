@@ -115,7 +115,7 @@ public class SmartFactory extends SlimefunItem implements EnergyNetComponent, Re
                 Utils.createBorder(this, ChestMenuUtils.getOutputSlotTexture(), BORDER_OUT);
                 this.addItem(PROGRESS_SLOT, PROGRESS_ITEM);
                 this.addItem(9, new CustomItemStack(Material.BLACK_STAINED_GLASS_PANE, "&7煤炭区",
-                    "&e该行的格子会接收来自货运的煤炭"
+                    "&e该行的格子会接收来自货运的煤炭。"
                 ));
                 this.addItem(18, new CustomItemStack(Material.YELLOW_STAINED_GLASS_PANE, "&b其他物品区",
                     "&e剩余的格子会接收来自货运的任何其他物品", "&e货运仅会补充现有的物品", "&e不会填充空的格子"
@@ -427,7 +427,7 @@ public class SmartFactory extends SlimefunItem implements EnergyNetComponent, Re
 
             if (ITEM_RECIPES.get(sfStack.getItem()).size() > 1) {
                 lore.add("");
-                lore.add(Utils.color("&7This recipe has a Magma Block alternative"));
+                lore.add(Utils.color("&7该配方可使用岩浆块替代"));
             }
 
             displayMeta.setLore(lore);
