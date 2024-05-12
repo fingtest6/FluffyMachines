@@ -316,7 +316,7 @@ public class FluffyItems {
     public static final SlimefunItemStack ADVANCED_AUTO_DISENCHANTER = new SlimefunItemStack(
         "ADVANCED_AUTO_DISENCHANTER",
         Material.ENCHANTING_TABLE,
-        "&c高级全自动驱魔机",
+        "&c高级全自动祛魔机",
         "",
         "&7从一个物品中移除第一个附魔",
         "&7需要一本&6远古之书&7来操作",
@@ -334,10 +334,10 @@ public class FluffyItems {
     public static final SlimefunItemStack UPGRADED_LUMBER_AXE = new SlimefunItemStack(
         "UPGRADED_LUMBER_AXE",
         Material.DIAMOND_AXE,
-        "&6&l改进斧头",
+        "&6&l改进伐木斧",
         "",
-        "&7一次砍下整棵树",
-        "&7右键给树削皮"
+        "&7一次砍下整棵树。",
+        "&7右键给树削皮。"
     );
     public static final SlimefunItemStack DOLLY = new SlimefunItemStack(
         "DOLLY",

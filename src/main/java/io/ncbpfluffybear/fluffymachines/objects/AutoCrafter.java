@@ -38,6 +38,8 @@ import java.util.List;
 
 public class AutoCrafter extends SlimefunItem implements EnergyNetComponent {
 
+    private static final String WIKI_PAGE = "machines/auto-crafters";
+
     public static final int ENERGY_CONSUMPTION = 128;
     public static final int CAPACITY = ENERGY_CONSUMPTION * 3;
     private final int[] border = {0, 1, 3, 4, 5, 7, 8, 13, 14, 15, 16, 17, 50, 51, 52, 53};
@@ -59,6 +61,11 @@ public class AutoCrafter extends SlimefunItem implements EnergyNetComponent {
         constructMenu(displayName);
         addItemHandler(onPlace());
         addItemHandler(onBreak());
+    }
+
+    @Override
+    public void postRegister() {
+        addWikiPage(WIKI_PAGE);
     }
 
     private void constructMenu(String displayName) {

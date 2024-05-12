@@ -49,6 +49,8 @@ import java.util.Locale;
 
 public class Barrel extends NonHopperableBlock implements DoubleHologramOwner {
 
+    private final String WIKI_PAGE = "barrels";
+
     private final int[] inputBorder = {9, 10, 11, 12, 18, 21, 27, 28, 29, 30};
     private final int[] outputBorder = {14, 15, 16, 17, 23, 26, 32, 33, 34, 35};
     private final int[] plainBorder = {0, 1, 2, 3, 4, 5, 6, 7, 8, 13, 36, 37, 38, 39, 40, 41, 42, 43, 44};
@@ -316,6 +318,11 @@ public class Barrel extends NonHopperableBlock implements DoubleHologramOwner {
                 return true;
             }
         });
+    }
+
+    @Override
+    public void postRegister() {
+        addWikiPage(WIKI_PAGE);
     }
 
     protected void tick(Block b) {

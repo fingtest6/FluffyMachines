@@ -23,9 +23,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import lombok.SneakyThrows;
 import net.guizhanss.guizhanlibplugin.updater.GuizhanUpdater;
+import net.guizhanss.slimefun4.utils.WikiUtils;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -108,6 +110,8 @@ public class FluffyMachines extends JavaPlugin implements SlimefunAddon {
         // Registering Items
         FluffyItemSetup.setup(this);
         FluffyItemSetup.setupBarrels(this);
+
+        WikiUtils.setupJson(this);
 
         // Register Events Class
         getServer().getPluginManager().registerEvents(new Events(), this);
@@ -211,6 +215,11 @@ public class FluffyMachines extends JavaPlugin implements SlimefunAddon {
     @Override
     public String getBugTrackerURL() {
         return "https://github.com/SlimefunGuguProject/FluffyMachines/issues";
+    }
+
+    @Override
+    public String getWikiURL() {
+        return "https://slimefun-addons-wiki.guizhanss.cn/fluffy-machines/{0}";
     }
 
     @Nonnull
