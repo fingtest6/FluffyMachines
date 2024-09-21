@@ -219,7 +219,7 @@ public class FluffyMachines extends JavaPlugin implements SlimefunAddon {
 
     @Override
     public String getWikiURL() {
-        return "https://slimefun-addons-wiki.guizhanss.cn/fluffy-machines/{0}";
+        return "https://slimefun-addons-wiki.guizhanss.net/fluffy-machines/{0}";
     }
 
     @Nonnull
