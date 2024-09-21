@@ -45,14 +45,14 @@ import java.util.Map;
  */
 public class SmartFactory extends SlimefunItem implements EnergyNetComponent, RecipeDisplayItem {
 
-    private static final int[] BORDER = new int[] {5, 6, 7, 8, 41, 42, 44, 50, 51, 52, 53};
-    private static final int[] BORDER_IN = new int[] {0, 1, 2, 3, 4, 9, 13, 18, 22, 27, 31, 36, 40, 45, 46, 47, 48, 49};
-    private static final int[] BORDER_OUT = new int[] {14, 15, 16, 17, 23, 26, 32, 33, 34, 35};
-    private static final int[] COAL_SLOTS = new int[] {10, 11, 12};
-    private static final int[] MISC_SLOTS = new int[] {19, 20, 21, 28, 29, 30, 37, 38, 39};
-    private static final int[] INPUT_SLOTS = new int[] {10, 11, 12, 19, 20, 21, 28, 29, 30, 37, 38, 39};
-    private static final int PROGRESS_SLOT = 42;
-    public static final int RECIPE_SLOT = 43;
+    private static final int[] BORDER = new int[] {41, 42, 44, 50, 51, 52, 53};
+    private static final int[] BORDER_IN = new int[] {0, 1, 2, 3, 4, 5, 9, 14, 18, 23, 27, 32, 36, 41, 45, 46, 47, 48, 49, 50};
+    private static final int[] BORDER_OUT = new int[] {6, 7, 8, 15, 17, 24, 26, 33, 34, 35};
+    private static final int[] COAL_SLOTS = new int[] {10, 11, 12, 13};
+    private static final int[] MISC_SLOTS = new int[] {19, 20, 21, 22, 28, 29, 30, 31, 37, 38, 39, 40};
+    private static final int[] INPUT_SLOTS = new int[] {10, 11, 12, 13, 19, 20, 21, 22, 28, 29, 30, 31, 37, 38, 39, 40};
+    private static final int PROGRESS_SLOT = 43;
+    public static final int RECIPE_SLOT = 44;
     private static final ItemStack PROGRESS_ITEM = new CustomItemStack(Material.FLINT_AND_STEEL, "&a进度");
 
     private static final Map<BlockPosition, Integer> progress = new HashMap<>();
