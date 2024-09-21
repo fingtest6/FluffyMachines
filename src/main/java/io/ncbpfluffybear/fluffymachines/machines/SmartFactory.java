@@ -56,7 +56,7 @@ public class SmartFactory extends SlimefunItem implements EnergyNetComponent, Re
     private static final ItemStack PROGRESS_ITEM = new CustomItemStack(Material.FLINT_AND_STEEL, "&a进度");
 
     private static final Map<BlockPosition, Integer> progress = new HashMap<>();
-    private static final int PROCESS_TIME_TICKS = 10; // "Number of seconds", except 1 Slimefun "second" = 1.6 IRL seconds
+    private static final int PROCESS_TIME_TICKS = 6; // "Number of seconds", except 1 Slimefun "second" = 1.6 IRL seconds
 
     private static final List<SlimefunItemStack> ACCEPTED_ITEMS = new ArrayList<>(Arrays.asList(
         SlimefunItems.BILLON_INGOT, SlimefunItems.SOLDER_INGOT, SlimefunItems.NICKEL_INGOT,
