@@ -456,7 +456,7 @@ public class SmartFactory extends SlimefunItem implements EnergyNetComponent, Re
     }
 
     private int[] getOutputSlots() {
-        return new int[] {24, 25};
+        return new int[] {16, 25};
     }
 
     public static List<SlimefunItemStack> getAcceptedItems() {
