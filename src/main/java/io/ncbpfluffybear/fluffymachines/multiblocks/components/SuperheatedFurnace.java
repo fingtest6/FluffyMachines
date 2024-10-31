@@ -21,7 +21,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
-import net.guizhanss.guizhanlib.slimefun.items.Metals;
+import net.guizhanss.fluffymachines.utils.MetalUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -351,7 +351,7 @@ public class SuperheatedFurnace extends NonHopperableBlock {
     private void updateIndicator(Block b) {
         BlockMenu inv = StorageCacheUtils.getMenu(b.getLocation());
         String stored = getBlockInfo(b.getLocation(), "stored");
-        String type = Metals.getType(getBlockInfo(b.getLocation(), "type"));
+        String type = MetalUtils.getMetalName(getBlockInfo(b.getLocation(), "type"));
 
         if (stored.equals("0")) {
             setBlockInfo(b, "type", null);
