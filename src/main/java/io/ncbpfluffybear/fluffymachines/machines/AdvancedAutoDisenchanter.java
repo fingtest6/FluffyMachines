@@ -24,7 +24,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
-import net.guizhanss.guizhanlib.minecraft.helper.enchantments.EnchantmentHelper;
+import net.guizhanss.minecraft.guizhanlib.gugu.minecraft.helpers.enchantments.EnchantmentHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -323,7 +323,7 @@ public class AdvancedAutoDisenchanter extends SlimefunItem implements EnergyNetC
 
             String ench = textColor +
                 "- " +
-                EnchantmentHelper.getEnchantmentName(disenchantKeys[i], false) +
+                EnchantmentHelper.getName(disenchantKeys[i]) +
                 " " +
                 Utils.toRoman(disenchants.get(disenchantKeys[i]));
 
